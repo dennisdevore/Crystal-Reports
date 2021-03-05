@@ -1,0 +1,1676 @@
+Report File: DREBOL Prelim by Order NumberCR10.rpt
+Report File DateTime: 18-Nov-2005 at 17:13:13
+
+Report Miner, Version 3.0 - Copyright 1999-2001, The Retsel Group
+  
+  Report Summary Information
+    Title = 
+    Author = $Id: DREBOL Prelim by Order NumberCR10.rmd 384 2005-11-18 23:16:45Z brad $
+    Keywords = 
+    Comments = 
+    Subject = 
+    Template = DREBOL Prelim by Order NumberCR10
+  
+  Report Statistics
+    Last Saved By = 
+    Revision Number = -1
+    Total Edit Time = 0
+    Last Printed = 12:00:00 AM
+    Created = 12:00:00 AM
+    Last Saved = 12:00:00 AM
+  
+  Report Options
+    Report Kind = Columnar Report
+    Convert Date Time Type = Keep Date and Time
+    Enable Asynchronous Query = False
+    Enable Generating Data for Hidden Object = True
+    Enable Parameter Prompting = True
+    Enable Select Distinct Records = False
+    Field Mapping Type = Auto Field Mapping
+    Formula Syntax = Crystal Syntax
+    Convert null field value to default = False
+    Case-insensitive SQL data = True
+    Field Mapping Type = Auto Field Mapping
+    Formula Syntax Type = Crystal Syntax
+    Last Get Formula Syntax = Crystal Syntax
+    Can Perform Grouping on Server = False
+    Has Saved Data = False
+    Verify on Every Print = False
+    Use Index for Speed = True
+    Save Preview Picture = False
+    Need Updated Pages = True
+    Perform Grouping on Server = False
+  
+  Page Setup
+    Top Margin = 360
+    Bottom Margin = 360
+    Left Margin = 360
+    Right Margin = 360
+  
+  Printer Details
+    Printer Name = 
+    Printer Driver = 
+    Printer Port = 
+    Printer Duplex Option = 0
+    Paper Orientation = Default Orientation
+    Paper Size = Default
+    Paper Source = Auto
+    Total Number of Pages = 
+    Print Date = 11/18/2005
+  
+  Record Selection Formula
+    	{BOLRPT_PRELIM.OH_ORDERID} = {?OrderID} and
+{BOLRPT_PRELIM.OH_SHIPID} = {?ShipID} 
+
+  
+  User Formulas
+  Name, Formula
+  @appt_date, DateValue({BOLRPT_PRELIM.OH_APPTDATE})
+
+  @appt_time, TimeValue({BOLRPT_PRELIM.OH_APPTDATE})
+
+  @order_date, DateValue ({BOLRPT_PRELIM.OH_ENTRYDATE})
+
+  @hazmat, if {BOLRPT_PRELIM.CI_HAZARDOUS} = 'Y' then 'X'
+else ' '
+
+  @hazmat2, if {BOLRPT_PRELIM.CI_HAZARDOUS} = 'Y' then 1
+else 0
+
+  @arrv_date, DateValue ({BOLRPT_PRELIM.OH_ARRIVALDATE})
+
+  @ship_date, DateValue ({BOLRPT_PRELIM.OH_SHIPDATE})
+
+  @bol_gen, ToText ({BOLRPT_PRELIM.OH_ORDERID},0) + '-' + ToText ({BOLRPT_PRELIM.OH_SHIPID},0)
+
+  @descpluslot, trim({BOLRPT_PRELIM.CI_DESCR}) + iif(isnull({BOLRPT_PRELIM.OD_LOTNUMBER}),"",
+   " Lot: " +trim({BOLRPT_PRELIM.OD_LOTNUMBER}))
+
+  @lot, iif(isnull({BOLRPT_PRELIM.OD_LOTNUMBER}),"",
+   "Lot: " +trim({BOLRPT_PRELIM.OD_LOTNUMBER}))
+
+  @desc, trim({BOLRPT_PRELIM.CI_DESCR})
+  @mfgdate, iif({BOLRPT_PRELIM.MFG_DATE} < date("1/2/1990"),"",toText({BOLRPT_PRELIM.MFG_DATE},"MM/dd/yyyy"))
+  
+  Parameters
+  Name, Description, Data Type
+    OrderID, Please enter the Order ID:, Number
+    ShipID, Please enter the Ship ID:, Number
+  
+  Groups
+  Group, Field, Break On, Sort Direction
+    Group #1, {BOLRPT_PRELIM.OH_ORDERID}, Any Value, Ascending
+    Group #2, {BOLRPT_PRELIM.OD_ITEM}, Any Value, Ascending
+    Group #3, {BOLRPT_PRELIM.OD_LOTNUMBER}, Any Value, Ascending
+  
+  SQL Query
+    
+ SELECT "BOLRPT_PRELIM"."FAC_NAME", "BOLRPT_PRELIM"."FAC_ADDR1", "BOLRPT_PRELIM"."FAC_ADDR2", "BOLRPT_PRELIM"."FAC_CITY", "BOLRPT_PRELIM"."FAC_STATE", "BOLRPT_PRELIM"."FAC_POSTALCODE", "BOLRPT_PRELIM"."CN_NAME", "BOLRPT_PRELIM"."CN_ADDR1", "BOLRPT_PRELIM"."CN_ADDR2", "BOLRPT_PRELIM"."CN_CITY", "BOLRPT_PRELIM"."CN_STATE", "BOLRPT_PRELIM"."CN_POSTALCODE", "BOLRPT_PRELIM"."CN_COUNTRYCODE", "BOLRPT_PRELIM"."LD_TRAILER", "BOLRPT_PRELIM"."LD_SEAL", "BOLRPT_PRELIM"."OH_ORDERID", "BOLRPT_PRELIM"."OH_SHIPID", "BOLRPT_PRELIM"."CR_NAME", "BOLRPT_PRELIM"."CR_ADDR1", "BOLRPT_PRELIM"."CR_ADDR2", "BOLRPT_PRELIM"."CR_CITY", "BOLRPT_PRELIM"."CR_STATE", "BOLRPT_PRELIM"."CR_POSTALCODE", "BOLRPT_PRELIM"."CR_COUNTRYCODE", "BOLRPT_PRELIM"."CU_NAME", "BOLRPT_PRELIM"."CU_ADDR1", "BOLRPT_PRELIM"."CU_ADDR2", "BOLRPT_PRELIM"."CU_CITY", "BOLRPT_PRELIM"."CU_STATE", "BOLRPT_PRELIM"."CU_POSTALCODE", "BOLRPT_PRELIM"."CU_COUNTRYCODE", "BOLRPT_PRELIM"."OD_ITEM", "BOLRPT_PRELIM"."CR_SCAC", "BOLRPT_PRELIM"."OH_PO", "BOLRPT_PRELIM"."CI_HAZARDOUS", "BOLRPT_PRELIM"."CI_DESCR", "BOLRPT_PRELIM"."OH_LOADNO", "BOLRPT_PRELIM"."STRM_ABBREV", "BOLRPT_PRELIM"."OH_REFERENCE", "BOLRPT_PRELIM"."ST_ABBREV", "BOLRPT_PRELIM"."CAR_NAME", "BOLRPT_PRELIM"."COD_AMOUNT", "BOLRPT_PRELIM"."CUSTID", "BOLRPT_PRELIM"."FAC_NUM", "BOLRPT_PRELIM"."OH_ENTRYDATE", "BOLRPT_PRELIM"."OH_ARRIVALDATE", "BOLRPT_PRELIM"."OH_SHIPDATE", "BOLRPT_PRELIM"."CHEMCODE", "BOLRPT_PRELIM"."BASEUOM", "CHEMICALCODES"."DOTBOLCOMMENT", "BOLRPT_PRELIM"."OH_SHIPTYPE", "CHEMICALCODES"."IATABOLCOMMENT", "CHEMICALCODES"."IMOBOLCOMMENT", "BOLRPT_PRELIM"."OD_QTY_ORDER", "BOLRPT_PRELIM"."OD_WEIGHTORDER", "BOLRPT_PRELIM"."OH_COMPANYCHECKOK", "BOLRPT_PRELIM"."OD_LOTNUMBER", "BOLRPT_PRELIM"."GROSSWEIGHT", "BOLRPT_PRELIM"."OD_CUBE_ORDER", "BOLRPT_PRELIM"."MFG_DATE", "BOLRPT_PRELIM"."OH_PRONO", "DRE_RPT_BOLITMCMTV4A"."BOLITMCOMMENT"
+ FROM   "ALPS"."DRE_BOLRPT_PRELIM" "BOLRPT_PRELIM", "ALPS"."CHEMICALCODES" "CHEMICALCODES", "ALPS"."DRE_RPT_BOLITMCMTV4A" "DRE_RPT_BOLITMCMTV4A"
+ WHERE  ("BOLRPT_PRELIM"."CHEMCODE"="CHEMICALCODES"."CHEMCODE" (+)) AND (((("BOLRPT_PRELIM"."OD_ITEM"="DRE_RPT_BOLITMCMTV4A"."ITEM" (+)) AND ("BOLRPT_PRELIM"."OH_ORDERID"="DRE_RPT_BOLITMCMTV4A"."ORDERID" (+))) AND ("BOLRPT_PRELIM"."OH_SHIPID"="DRE_RPT_BOLITMCMTV4A"."SHIPID" (+))) AND ("BOLRPT_PRELIM"."OD_LOTNUMBER_NULL"="DRE_RPT_BOLITMCMTV4A"."LOTNUMBER" (+))) AND "BOLRPT_PRELIM"."OH_ORDERID"=1 AND "BOLRPT_PRELIM"."OH_SHIPID"=1
+ ORDER BY "BOLRPT_PRELIM"."OH_ORDERID", "BOLRPT_PRELIM"."OD_ITEM", "BOLRPT_PRELIM"."OD_LOTNUMBER"
+
+
+  
+  Tables
+  Table, Alias, Location, Driver
+    BOLRPT_PRELIM, , DRE_BOLRPT_PRELIM, crdb_oracle.dll
+  	Column, DataType, Size
+    	{BOLRPT_PRELIM.OH_ORDERID}, Integer (32 bit signed), 4
+    	{BOLRPT_PRELIM.OH_SHIPID}, Integer (32 bit signed), 4
+    	{BOLRPT_PRELIM.OH_ENTRYDATE}, DateTime, 8
+    	{BOLRPT_PRELIM.OH_APPTDATE}, DateTime, 8
+    	{BOLRPT_PRELIM.OH_SHIPDATE}, DateTime, 8
+    	{BOLRPT_PRELIM.OH_PO}, String, 42
+    	{BOLRPT_PRELIM.OH_ORDERSTATUS}, String, 4
+    	{BOLRPT_PRELIM.OH_BILLOFLADING}, String, 82
+    	{BOLRPT_PRELIM.OH_ARRIVALDATE}, DateTime, 8
+    	{BOLRPT_PRELIM.OH_LOADNO}, Integer (32 bit signed), 4
+    	{BOLRPT_PRELIM.OH_REFERENCE}, String, 42
+    	{BOLRPT_PRELIM.CN_NAME}, String, 82
+    	{BOLRPT_PRELIM.CN_ADDR1}, String, 82
+    	{BOLRPT_PRELIM.CN_ADDR2}, String, 82
+    	{BOLRPT_PRELIM.CN_CITY}, String, 62
+    	{BOLRPT_PRELIM.CN_STATE}, String, 6
+    	{BOLRPT_PRELIM.CN_POSTALCODE}, String, 26
+    	{BOLRPT_PRELIM.CN_COUNTRYCODE}, String, 8
+    	{BOLRPT_PRELIM.CR_NAME}, String, 82
+    	{BOLRPT_PRELIM.CR_ADDR1}, String, 82
+    	{BOLRPT_PRELIM.CR_ADDR2}, String, 82
+    	{BOLRPT_PRELIM.CR_CITY}, String, 62
+    	{BOLRPT_PRELIM.CR_STATE}, String, 6
+    	{BOLRPT_PRELIM.CR_POSTALCODE}, String, 26
+    	{BOLRPT_PRELIM.CR_COUNTRYCODE}, String, 8
+    	{BOLRPT_PRELIM.CAR_NAME}, String, 82
+    	{BOLRPT_PRELIM.CR_SCAC}, String, 10
+    	{BOLRPT_PRELIM.CU_CUSTID}, String, 22
+    	{BOLRPT_PRELIM.CU_NAME}, String, 82
+    	{BOLRPT_PRELIM.CU_ADDR1}, String, 82
+    	{BOLRPT_PRELIM.CU_ADDR2}, String, 82
+    	{BOLRPT_PRELIM.CU_CITY}, String, 62
+    	{BOLRPT_PRELIM.CU_STATE}, String, 6
+    	{BOLRPT_PRELIM.CU_POSTALCODE}, String, 26
+    	{BOLRPT_PRELIM.CU_COUNTRYCODE}, String, 8
+    	{BOLRPT_PRELIM.OD_ORDERID}, Integer (32 bit signed), 4
+    	{BOLRPT_PRELIM.OD_SHIPID}, Integer (32 bit signed), 4
+    	{BOLRPT_PRELIM.OD_ITEM}, String, 42
+    	{BOLRPT_PRELIM.OD_WEIGHTORDER}, Number, 8
+    	{BOLRPT_PRELIM.FAC_NAME}, String, 82
+    	{BOLRPT_PRELIM.FAC_ADDR1}, String, 82
+    	{BOLRPT_PRELIM.FAC_ADDR2}, String, 82
+    	{BOLRPT_PRELIM.FAC_CITY}, String, 62
+    	{BOLRPT_PRELIM.FAC_STATE}, String, 6
+    	{BOLRPT_PRELIM.FAC_POSTALCODE}, String, 26
+    	{BOLRPT_PRELIM.FAC_COUNTRYCODE}, String, 8
+    	{BOLRPT_PRELIM.LD_TRAILER}, String, 26
+    	{BOLRPT_PRELIM.LD_SEAL}, String, 32
+    	{BOLRPT_PRELIM.LD_PRONO}, String, 42
+    	{BOLRPT_PRELIM.ODC_ITEM}, String, 42
+    	{BOLRPT_PRELIM.CI_DESCR}, String, 82
+    	{BOLRPT_PRELIM.CI_HAZARDOUS}, String, 4
+    	{BOLRPT_PRELIM.CI_LOTSUMBOL}, String, 4
+    	{BOLRPT_PRELIM.ST_ABBREV}, String, 26
+    	{BOLRPT_PRELIM.STRM_ABBREV}, String, 26
+    	{BOLRPT_PRELIM.CUSTID}, String, 22
+    	{BOLRPT_PRELIM.FAC_NUM}, String, 8
+    	{BOLRPT_PRELIM.COD}, String, 4
+    	{BOLRPT_PRELIM.COD_AMOUNT}, Number, 8
+    	{BOLRPT_PRELIM.OD_QTY_ORDER}, Number, 8
+    	{BOLRPT_PRELIM.OD_CUBE_SHIP}, Number, 8
+    	{BOLRPT_PRELIM.CHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.BASEUOM}, String, 10
+    	{BOLRPT_PRELIM.OH_SHIPTYPE}, String, 4
+    	{BOLRPT_PRELIM.OH_INTERLINECARRIER}, String, 10
+    	{BOLRPT_PRELIM.OH_COMPANYCHECKOK}, String, 4
+    	{BOLRPT_PRELIM.OH_TRANSAPPTDATE}, DateTime, 8
+    	{BOLRPT_PRELIM.OH_DELIVERYAPTCONFNAME}, String, 42
+    	{BOLRPT_PRELIM.OD_LOTNUMBER}, String, 62
+    	{BOLRPT_PRELIM.OD_LOTNUMBER_NULL}, String, 62
+    	{BOLRPT_PRELIM.OD_CUBE_ORDER}, Number, 8
+    	{BOLRPT_PRELIM.OD_DTLPASSTHRUCHAR01}, String, 2
+    	{BOLRPT_PRELIM.OD_CONSIGNEESKU}, String, 2
+    	{BOLRPT_PRELIM.OH_PASSTHRUCHAR01}, String, 512
+    	{BOLRPT_PRELIM.OH_PASSTHRUCHAR02}, String, 512
+    	{BOLRPT_PRELIM.OH_PASSTHRUCHAR09}, String, 512
+    	{BOLRPT_PRELIM.OH_PASSTHRUCHAR10}, String, 512
+    	{BOLRPT_PRELIM.OH_PASSTHRUCHAR12}, String, 512
+    	{BOLRPT_PRELIM.OH_PASSTHRUCHAR15}, String, 512
+    	{BOLRPT_PRELIM.LABELUOM}, String, 10
+    	{BOLRPT_PRELIM.SECONDARYCHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.TERTIARYCHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.QUATERNARYCHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.IMOPRIMARYCHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.IMOSECONDARYCHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.IMOTERTIARYCHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.IMOQUATERNARYCHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.IATAPRIMARYCHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.IATASECONDARYCHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.IATATERTIARYCHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.IATAQUATERNARYCHEMCODE}, String, 26
+    	{BOLRPT_PRELIM.GROSSWEIGHT}, Number, 8
+    	{BOLRPT_PRELIM.OH_PRONO}, String, 42
+    	{BOLRPT_PRELIM.MFG_DATE}, DateTime, 8
+  
+    CHEMICALCODES, , CHEMICALCODES, crdb_oracle.dll
+  	Column, DataType, Size
+    	{CHEMICALCODES.CHEMCODE}, String, 26
+    	{CHEMICALCODES.ABBREV}, String, 26
+    	{CHEMICALCODES.PROPERSHIPPINGNAME1}, String, 512
+    	{CHEMICALCODES.PROPERSHIPPINGNAME2}, String, 512
+    	{CHEMICALCODES.CHEMICALCONSTITUENTS}, String, 512
+    	{CHEMICALCODES.PRIMARYHAZARDCLASS}, String, 26
+    	{CHEMICALCODES.SECONDARYHAZARDCLASS}, String, 26
+    	{CHEMICALCODES.TERTIARYHAZARDCLASS}, String, 26
+    	{CHEMICALCODES.NAERGNUMBER}, String, 74
+    	{CHEMICALCODES.DOTBOLCOMMENT}, String, 512
+    	{CHEMICALCODES.IATABOLCOMMENT}, String, 512
+    	{CHEMICALCODES.IMOBOLCOMMENT}, String, 512
+    	{CHEMICALCODES.OTHERDESCR}, String, 512
+    	{CHEMICALCODES.UNNUM}, String, 42
+    	{CHEMICALCODES.PACKINGGROUP}, String, 42
+    	{CHEMICALCODES.DONOTPRINTBOL}, String, 4
+    	{CHEMICALCODES.LASTUSER}, String, 26
+    	{CHEMICALCODES.LASTUPDATE}, DateTime, 8
+  
+    DRE_RPT_BOLITMCMTV4A, , DRE_RPT_BOLITMCMTV4A, crdb_oracle.dll
+  	Column, DataType, Size
+    	{DRE_RPT_BOLITMCMTV4A.ORDERID}, Integer (32 bit signed), 4
+    	{DRE_RPT_BOLITMCMTV4A.SHIPID}, Integer (32 bit signed), 4
+    	{DRE_RPT_BOLITMCMTV4A.ITEM}, String, 42
+    	{DRE_RPT_BOLITMCMTV4A.LOTNUMBER}, String, 62
+    	{DRE_RPT_BOLITMCMTV4A.BOLITMCOMMENT}, String, 8002
+  
+  Database Links
+  SourceTable, JoinType, Destination, LookupType
+    BOLRPT_PRELIM.CHEMCODE, Left Outer, CHEMICALCODES.CHEMCODE, Product
+    BOLRPT_PRELIM.OD_ITEMBOLRPT_PRELIM.OH_ORDERIDBOLRPT_PRELIM.OH_SHIPIDBOLRPT_PRELIM.OD_LOTNUMBER_NULL, Left Outer, DRE_RPT_BOLITMCMTV4A.ITEMDRE_RPT_BOLITMCMTV4A.ORDERIDDRE_RPT_BOLITMCMTV4A.SHIPIDDRE_RPT_BOLITMCMTV4A.LOTNUMBER, Product
+  
+  Areas
+  Report Header
+  Suppressed, Height = 0, Keep Together
+    No objects in this section.
+    
+  
+  Page Header a
+  Height = 3.1, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    0, Field Object: ("PageNofM"), Position=(6.2, 0.03), Size=(1.56 x 0.18)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 12
+      Paragraph: Line Spacing Type = Multiple
+      Field: Special Var Field=Page N of M
+    
+    1, Text: ("Shippers Instructions"), Position=(3.33, 0.33), Size=(1.3 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    2, Text: ("{BOLRPT_PRELIM.CU_NAME}{BOLRPT_PRELIM.FAC_NAME}{BOLRPT_PRELIM.FAC_NUM}{BOLRPT_PRELIM.FAC_ADDR1}{BOLRPT_PRELIM.FAC_ADDR2}{BOLRPT_PRELIM.FAC_CITY}{BOLRPT_PRELIM.FAC_STATE}{BOLRPT_PRELIM.FAC_POSTALCODE}"), Position=(0.06, 0.72), Size=(3.08 x 0.75)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: Dotted, Color=Black
+      Font: Name = Times New Roman, Size = 9
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.1, Embedded Field: Database Field=CU_NAME
+      Font: Name = Times New Roman, Size = 9
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.2, Embedded Field: Database Field=FAC_NAME
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.3, Embedded Field: Database Field=FAC_NUM
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.4, Embedded Field: Database Field=FAC_ADDR1
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.5, Embedded Field: Database Field=FAC_ADDR2
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.6, Embedded Field: Database Field=FAC_CITY
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.7, Embedded Field: Database Field=FAC_STATE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.8, Embedded Field: Database Field=FAC_POSTALCODE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+    
+    3, Text: ("Ship From:"), Position=(0, 0.58), Size=(1.17 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    4, Text: ("{BOLRPT_PRELIM.CN_NAME}{BOLRPT_PRELIM.CN_ADDR1}{BOLRPT_PRELIM.CN_ADDR2}{BOLRPT_PRELIM.CN_CITY}{BOLRPT_PRELIM.CN_STATE}{BOLRPT_PRELIM.CN_POSTALCODE}{BOLRPT_PRELIM.CN_COUNTRYCODE}"), Position=(0.06, 1.81), Size=(3.08 x 0.75)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: Dotted, Color=Black
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    4.1, Embedded Field: Database Field=CN_NAME
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    4.2, Embedded Field: Database Field=CN_ADDR1
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    4.3, Embedded Field: Database Field=CN_ADDR2
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    4.4, Embedded Field: Database Field=CN_CITY
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    4.5, Embedded Field: Database Field=CN_STATE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    4.6, Embedded Field: Database Field=CN_POSTALCODE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    4.7, Embedded Field: Database Field=CN_COUNTRYCODE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+    
+    5, Text: ("As Agent for the Shipper/Consignor whose name appears below
+Ship To"), Position=(0, 1.58), Size=(3.08 x 0.26)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    6, Box: Position=(6.2, 0.24), Size=(1.65 x 2.35)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Close at Page Break = True
+    
+    7, Text: ("The property described below, in apparent good order, except as noted (contents and condition of contents of packages unknown) marked, consigned, and destined as shown below, which said carrier aggrees to carry to destination, if on its route, or otherwise to deliver to another carrier on the route to destination. Every service to be performed hereunder shall be subject to all the conditions not prohibited by law, whether printed or written, herein contained, including the conditions on the back hereof, which are hereby agreed to by the shipper and accepted for himself and his assigns. Carrier acknowledges that Weber Distribution, as agent for the disclosed shipper/consignor, has no liability for payment of freight or any other charges, and the transportation contract evidenced by this bill of lading is between the carrier and the designated shipper/consignor."), Position=(0.08, 2.67), Size=(7.83 x 0.45)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 5
+      Paragraph: Line Spacing Type = Multiple
+    
+    8, Horizontal Line: Position=(6.2, 0.54), Size=(1.64 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    9, Horizontal Line: Position=(6.2, 0.88), Size=(1.64 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    10, Horizontal Line: Position=(6.2, 1.2), Size=(1.64 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    11, Horizontal Line: Position=(6.2, 1.56), Size=(1.63 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    12, Horizontal Line: Position=(6.2, 1.89), Size=(1.64 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    13, Text: ("WHSE B/L"), Position=(6.25, 0.25), Size=(0.53 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    14, Text: ("Arrival Date"), Position=(6.25, 0.57), Size=(0.61 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    15, Text: ("Ship Date"), Position=(6.25, 0.91), Size=(0.53 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    16, Text: ("Order Date"), Position=(6.25, 1.24), Size=(0.61 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    17, Text: ("Route"), Position=(6.25, 1.58), Size=(0.28 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    18, Text: ("Freight Charge"), Position=(6.25, 1.91), Size=(0.7 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    19, Field Object: ("@order_date"), Position=(6.31, 1.39), Size=(1 x 0.17)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Date: CalendarType = Gregorian, Day type = Numeric, Era type = None, First Separator = /, Leading Day Position = Leading, Leading Day Type = None, Month Type = Numeric, Date Order = Month Day Year, Second Separator = /, Year Type = Long
+      Font: Name = Times New Roman, Size = 10
+      Field: Summary Field=order_date
+    
+    20, Text: ("Uniform Straight Bill of Lading"), Position=(2.33, 0), Size=(1.92 x 0.23)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+    
+    21, Field Object: ("@arrv_date"), Position=(6.31, 0.72), Size=(1.02 x 0.17)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Date: CalendarType = Gregorian, Day type = Numeric, Era type = None, First Separator = /, Leading Day Position = Leading, Leading Day Type = None, Month Type = Numeric, Date Order = Month Day Year, Second Separator = /, Year Type = Long
+      Font: Name = Times New Roman, Size = 10
+      Field: Summary Field=arrv_date
+    
+    22, Field Object: ("@ship_date"), Position=(6.31, 1.05), Size=(0.99 x 0.17)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Date: CalendarType = Gregorian, Day type = Numeric, Era type = None, First Separator = /, Leading Day Position = Leading, Leading Day Type = None, Month Type = Numeric, Date Order = Month Day Year, Second Separator = /, Year Type = Long
+      Font: Name = Times New Roman, Size = 10
+      Field: Summary Field=ship_date
+    
+    23, Field Object: ("STRM_ABBREV"), Position=(6.31, 2.06), Size=(1.12 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=STRM_ABBREV
+    
+    24, Horizontal Line: Position=(6.2, 2.23), Size=(1.64 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    25, Text: ("COD Amount:"), Position=(6.25, 2.25), Size=(1.5 x 0.14)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    26, Subreport: Position=(3.39, 0.47), Size=(2.7 x 2.08)
+      Subreport: Subreport Name = bolcmts, Enable on Demand = False
+      Common: Can Grow = True, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: Dotted, Color=Black
+    
+    27, Field Object: ("ST_ABBREV"), Position=(6.31, 1.73), Size=(1.12 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=ST_ABBREV
+    
+    28, Field Object: ("COD_AMOUNT"), Position=(6.31, 2.33), Size=(1.67 x 0.23)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 14, Style = Bold
+      Number: Decimal Places = 2, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Hundredth, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Database Field=COD_AMOUNT
+    
+    29, Text: ("{BOLRPT_PRELIM.OH_ORDERID}{BOLRPT_PRELIM.OH_SHIPID}"), Position=(6.31, 0.33), Size=(1.42 x 0.45)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 12
+      Paragraph: Line Spacing Type = Multiple
+  
+    29.1, Embedded Field: Database Field=OH_ORDERID
+      Font: Name = Times New Roman, Size = 12
+      Paragraph: Line Spacing Type = Multiple
+  
+    29.2, Embedded Field: Database Field=OH_SHIPID
+      Font: Name = Times New Roman, Size = 12
+      Paragraph: Line Spacing Type = Multiple
+    
+    30, Ole Object: Position=(0.08, 0.08), Size=(1.86 x 0.42)
+      Picture: X Scaling = 1, Y Scaling = 0.758, ScaledWidth = 0, ScaledHeight = 0
+      Border: None
+      Common: Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+    
+  
+  Page Header b
+  Height = 6, Keep Together, Underlay Section 
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    31, Horizontal Line: Position=(0.08, 0.3), Size=(7.83 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    32, Vertical Line: Position=(1.61, 0), Size=(0 x 0.58)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    33, Vertical Line: Position=(0.42, 0.58), Size=(0 x 5.42)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    34, Text: ("H/M"), Position=(0.17, 0.67), Size=(0.25 x 0.11)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    35, Text: ("Quantity"), Position=(0.46, 0.67), Size=(0.71 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    36, Text: ("Item Number"), Position=(1.33, 0.67), Size=(0.67 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    37, Text: ("                                   
+  Description"), Position=(2.42, 0.58), Size=(2.92 x 0.25)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    38, Vertical Line: Position=(3.75, 0.31), Size=(0 x 0.28)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    39, Text: ("Shipper's Reference Number"), Position=(6.11, 0.32), Size=(1.58 x 0.14)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    40, Vertical Line: Position=(1.17, 0.58), Size=(0 x 5.42)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    41, Vertical Line: Position=(6.08, 0.58), Size=(0 x 0.26)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    42, Text: ("Gross Weight
+ in lbs."), Position=(6.08, 0.58), Size=(0.6 x 0.22)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    43, Horizontal Line: Position=(6.67, 1.33), Size=(1.24 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    44, Text: ("SCAC"), Position=(5.17, 0.01), Size=(0.42 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    45, Text: ("PO Number"), Position=(6.17, 0), Size=(0.67 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    46, Text: ("Carrier"), Position=(1.67, 0.01), Size=(0.42 x 0.14)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    47, Text: ("Vehicle Number"), Position=(0.15, 0.01), Size=(0.92 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    48, Vertical Line: Position=(6.08, 0), Size=(0 x 0.58)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    49, Vertical Line: Position=(5.11, 0), Size=(0 x 0.3)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    50, Text: ("Vendor Ship Point #"), Position=(1.67, 0.33), Size=(1.17 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    51, Text: ("Pro Number"), Position=(3.83, 0.33), Size=(0.75 x 0.14)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    52, Text: ("Seals"), Position=(0.17, 0.33), Size=(0.33 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    53, Field Object: ("LD_TRAILER"), Position=(0.4, 0.16), Size=(1.12 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=LD_TRAILER
+    
+    54, Field Object: ("LD_SEAL"), Position=(0.42, 0.42), Size=(1.12 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=LD_SEAL
+    
+    55, Field Object: ("CR_SCAC"), Position=(5.25, 0.17), Size=(0.67 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=CR_SCAC
+    
+    56, Field Object: ("OH_PO"), Position=(6.2, 0.16), Size=(1.64 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=OH_PO
+    
+    57, Horizontal Line: Position=(6.67, 1.83), Size=(1.24 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    58, Vertical Line: Position=(2.25, 0.58), Size=(0 x 5.42)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    59, Box: Position=(0.08, 0), Size=(7.83 x 0.58)
+       Line Style = None, Line Thickness = 20, Line Color = Black, Close at Page Break = True
+    
+    60, Horizontal Line: Position=(6.67, 2.75), Size=(1.25 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    61, Text: ("Where the rate is dependent on value, shippers are required to state specifically in writing the agreed or declared value of the property as  follows:
+'The agreed or declared value for the property is specifically stated by the shipper to be not exceeding  
+
+_______________ per  __________.'"), Position=(6.75, 1.83), Size=(1.08 x 0.92)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 5
+      Paragraph: Line Spacing Type = Multiple
+    
+    62, Field Object: ("OH_REFERENCE"), Position=(6.21, 0.45), Size=(1.66 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=OH_REFERENCE
+    
+    63, Field Object: ("CAR_NAME"), Position=(1.7, 0.14), Size=(3.36 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=CAR_NAME
+    
+    64, Text: ("Subject to Section 7 of Conditions of applicable bill of lading, if this shipment is to be delivered to the consignee without recourse on the consignor, the consignor shall sign the following statement.
+The carrier shall not make delivery of this shipment without payment of freight and all other lawful charges.
+
+_____________________________
+(Signature of Consignor)"), Position=(6.75, 2.83), Size=(1.08 x 1)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 5
+      Paragraph: Line Spacing Type = Multiple
+    
+    65, Text: ("* This is to certify that the herein named articles are properly classified, described, packaged, marked and labeled, and are in proper condition for transportation, according to the Department of Transportation."), Position=(6.75, 1.33), Size=(1.08 x 0.5)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 5
+      Paragraph: Line Spacing Type = Multiple
+    
+    66, Horizontal Line: Position=(6.67, 3.83), Size=(1.25 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    67, Vertical Line: Position=(0.08, 0), Size=(0 x 6)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    68, Text: ("Load#"), Position=(5.33, 0.33), Size=(0.67 x 0.14)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    69, Field Object: ("OH_LOADNO"), Position=(5.42, 0.42), Size=(0.62 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Database Field=OH_LOADNO
+    
+    70, Horizontal Line: Position=(0.09, 0.58), Size=(7.82 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    71, Horizontal Line: Position=(0.1, 0), Size=(7.82 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    72, Text: ("* The Paper Bags, Fibre Pails, Fibre Drums, Fibre Boxes used for this Shipment conform to the specifications set forth in the maker's certificate theron, and all other Requirements of rules for these packages in Uniform Freight Classification and the National Motor Freight Commission."), Position=(6.75, 0.58), Size=(1.08 x 0.75)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 5
+      Paragraph: Line Spacing Type = Multiple
+    
+    73, Text: ("IF EMERGENCY ASSISTANCE IS REQUIRED REGARDING THESE PRODUCTS, TELEPHONE CHEMTREC (CHEMICAL TRANSPORTATION EMERGENCY CENTER) 
+800-424-9300.  
+EMERGENCY INFORMATION IS AVAILABLE 24 HOURS A DAY.  ALSO ADVISE SHIPPER."), Position=(6.75, 3.92), Size=(1.08 x 1.33)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 8, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    74, Text: ("Carrier certifies emergency response information was made available and/or carrier has the DOT Emergency Response Guidebook or equivalent document on his possession.
+
+
+ ____________________________
+(Signature)"), Position=(6.75, 5.17), Size=(1.08 x 0.83)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 4
+      Paragraph: Line Spacing Type = Multiple
+    
+    75, Vertical Line: Position=(5.24, 0.31), Size=(0 x 0.28)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    76, Vertical Line: Position=(7.92, 0), Size=(0 x 0.58)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    77, Vertical Line: Position=(5.5, 0.58), Size=(0 x 0.26)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    78, Text: ("Cubic
+Feet"), Position=(5.5, 0.58), Size=(0.6 x 0.22)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    79, Horizontal Line: Position=(0.08, 0.83), Size=(6.58 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    80, Horizontal Line: Position=(0.08, 6), Size=(7.83 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    81, Vertical Line: Position=(6.67, 0.58), Size=(0 x 5.42)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    82, Vertical Line: Position=(7.92, 0.58), Size=(0 x 5.42)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    83, Field Object: ("OH_PRONO"), Position=(3.83, 0.44), Size=(1.28 x 0.12)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=OH_PRONO
+    
+  
+  Page Header c
+  Height = 0, Keep Together
+    No objects in this section.
+    
+  
+  Group Header #1
+  Suppressed, Height = 0.3, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    84, Text: (""), Position=(1.17, 0.17), Size=(1.56 x 0.17)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Arial, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+    
+    85, Field Object: ("Group #1 Name"), Position=(3.08, 0.08), Size=(1.77 x 0.15)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Arial, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Group Name Field=Group #1 Name
+    
+  
+  
+  Group Header #2
+  Suppressed, Height = 0, Keep Together
+    No objects in this section.
+    
+  
+  Group Header a #3
+  Suppressed, Height = 0, Keep Together
+      Conditional Formulas: 
+      Enable Suppress :  ISNULL({BOLRPT_PRELIM.CHEMCODE})=false
+
+    No objects in this section.
+    
+  Group Header b #3
+  Suppressed, Height = 0.2, Keep Together
+      Conditional Formulas: 
+      Enable Suppress :  ISNULL({BOLRPT_PRELIM.CHEMCODE})=true or
+{BOLRPT_PRELIM.OH_SHIPTYPE} in ['A','C']
+
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    86, Field Object: ("@hazmat"), Position=(0.17, 0.08), Size=(0.17 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Summary Field=hazmat
+    
+    87, Field Object: ("BASEUOM"), Position=(0.75, 0.08), Size=(0.42 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=BASEUOM
+    
+    88, Field Object: ("CHEMCODE"), Position=(1.25, 0.08), Size=(1 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=CHEMCODE
+    
+    89, Field Object: ("DOTBOLCOMMENT"), Position=(2.33, 0.08), Size=(3.17 x 0.16)
+      Border: None
+      Common: Can Grow = True, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=DOTBOLCOMMENT
+    
+    90, Field Object: ("Sum of BOLRPT_PRELIM.OD_QTY_ORDER"), Position=(0.33, 0.08), Size=(0.42 x 0.17)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of OD_QTY_ORDER]
+    
+    91, Field Object: ("Sum of BOLRPT_PRELIM.OD_WEIGHTORDER"), Position=(6.18, 0.08), Size=(0.49 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of OD_WEIGHTORDER]
+    
+  
+  Group Header c #3
+  Suppressed, Height = 0.2, Keep Together
+      Conditional Formulas: 
+      Enable Suppress :  ISNULL({BOLRPT_PRELIM.CHEMCODE})=true or
+{BOLRPT_PRELIM.OH_SHIPTYPE} <> 'A'
+
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    92, Field Object: ("@hazmat"), Position=(0.17, 0.08), Size=(0.17 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Summary Field=hazmat
+    
+    93, Field Object: ("BASEUOM"), Position=(0.75, 0.08), Size=(0.42 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=BASEUOM
+    
+    94, Field Object: ("CHEMCODE"), Position=(1.25, 0.08), Size=(1 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=CHEMCODE
+    
+    95, Field Object: ("IATABOLCOMMENT"), Position=(2.33, 0.08), Size=(3.17 x 0.16)
+      Border: None
+      Common: Can Grow = True, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=IATABOLCOMMENT
+    
+    96, Field Object: ("Sum of BOLRPT_PRELIM.OD_QTY_ORDER"), Position=(0.33, 0.08), Size=(0.42 x 0.17)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of OD_QTY_ORDER]
+    
+    97, Field Object: ("Sum of BOLRPT_PRELIM.OD_WEIGHTORDER"), Position=(6.18, 0.08), Size=(0.49 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of OD_WEIGHTORDER]
+    
+  
+  Group Header d #3
+  Suppressed, Height = 0.2, Keep Together
+      Conditional Formulas: 
+      Enable Suppress :  ISNULL({BOLRPT_PRELIM.CHEMCODE})=true or
+{BOLRPT_PRELIM.OH_SHIPTYPE} <> 'C'
+
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    98, Field Object: ("@hazmat"), Position=(0.17, 0.08), Size=(0.17 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Summary Field=hazmat
+    
+    99, Field Object: ("BASEUOM"), Position=(0.75, 0.08), Size=(0.42 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=BASEUOM
+    
+    100, Field Object: ("CHEMCODE"), Position=(1.25, 0.08), Size=(1 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=CHEMCODE
+    
+    101, Field Object: ("IMOBOLCOMMENT"), Position=(2.33, 0.08), Size=(3.17 x 0.16)
+      Border: None
+      Common: Can Grow = True, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=IMOBOLCOMMENT
+    
+    102, Field Object: ("Sum of BOLRPT_PRELIM.OD_QTY_ORDER"), Position=(0.33, 0.08), Size=(0.42 x 0.17)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of OD_QTY_ORDER]
+    
+    103, Field Object: ("Sum of BOLRPT_PRELIM.OD_WEIGHTORDER"), Position=(6.18, 0.08), Size=(0.49 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of OD_WEIGHTORDER]
+    
+  
+  Group Header e #3
+  Suppressed, Height = 0.2, Keep Together
+      Conditional Formulas: 
+      Enable Suppress :  ISNULL({BOLRPT_PRELIM.CHEMCODE})=true
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    104, Field Object: ("OD_ITEM"), Position=(1.25, 0), Size=(1 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=OD_ITEM
+    
+    105, Text: ("{BOLRPT_PRELIM.CI_DESCR}"), Position=(2.32, 0), Size=(4.34 x 0.16)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+  
+    105.1, Embedded Field: Database Field=CI_DESCR
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+  
+  
+  Detail
+  Height = 0.4, Keep Together
+      Conditional Formulas: 
+      Enable Suppress :  isnull({BOLRPT_PRELIM.OD_LOTNUMBER})
+
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    106, Text: ("{BOLRPT_PRELIM.OD_LOTNUMBER}{BOLRPT_PRELIM.OD_QTY_ORDER}"), Position=(1.44, 0.21), Size=(4.17 x 0.21)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    106.1, Embedded Field: Database Field=OD_LOTNUMBER
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+  
+    106.2, Embedded Field: Database Field=OD_QTY_ORDER
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+    
+    107, Field Object: ("OD_WEIGHTORDER"), Position=(5.63, 0.26), Size=(0.91 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Database Field=OD_WEIGHTORDER
+    
+  
+  
+  Group Footer #3
+  Height = 0.5
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    108, Field Object: ("OD_ITEM"), Position=(1.25, 0.05), Size=(1 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=OD_ITEM
+    
+    109, Field Object: ("BASEUOM"), Position=(0.75, 0.04), Size=(0.42 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=BASEUOM
+    
+    110, Field Object: ("Sum of BOLRPT_PRELIM.OD_QTY_ORDER"), Position=(0.25, 0.05), Size=(0.5 x 0.17)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of OD_QTY_ORDER]
+    
+    111, Text: ("Sum ({BOLRPT_PRELIM.OD_WEIGHTORDER}, {BOLRPT_PRELIM.OD_LOTNUMBER})"), Position=(4.25, 0.33), Size=(1.45 x 0.17)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+  
+    111.1, Embedded Field: Summarized Field = [Sum of OD_WEIGHTORDER]
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    112, Field Object: ("Sum of BOLRPT_PRELIM.OD_CUBE_ORDER"), Position=(5.45, 0.03), Size=(0.64 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 2, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Hundredth, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of OD_CUBE_ORDER]
+    
+    113, Field Object: ("Sum of BOLRPT_PRELIM.GROSSWEIGHT"), Position=(6.18, 0.03), Size=(0.49 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of GROSSWEIGHT]
+    
+    114, Text: ("{@mfgdate}"), Position=(2.33, 0.33), Size=(1.95 x 0.16)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+  
+    114.1, Embedded Field: Summary Field=mfgdate
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    115, Field Object: ("@lot"), Position=(2.33, 0.2), Size=(2.17 x 0.15)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Summary Field=lot
+    
+    116, Field Object: ("@desc"), Position=(2.33, 0.02), Size=(3.08 x 0.15)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Summary Field=desc
+    
+  
+  
+  Group Footer #2
+  Height = 0.2, Keep Together
+      Conditional Formulas: 
+      Enable Suppress :  isnull({DRE_RPT_BOLITMCMTV4A.BOLITMCOMMENT})
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    117, Field Object: ("BOLITMCOMMENT"), Position=(2.34, 0), Size=(3.35 x 0.15)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Arial, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=BOLITMCOMMENT
+    
+  
+  
+  Group Footer a #1
+  Height = 1.7, Keep Together
+      Conditional Formulas: 
+      Enable Suppress :  isnull({BOLRPT_PRELIM.COD_AMOUNT})
+
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    118, Text: ("***COD***"), Position=(0.17, 0.08), Size=(7.75 x 0.5)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Arial, Size = 35, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    119, Text: ("{BOLRPT_PRELIM.CU_NAME}{BOLRPT_PRELIM.CU_ADDR1}{BOLRPT_PRELIM.CU_ADDR2}{BOLRPT_PRELIM.CU_CITY}{BOLRPT_PRELIM.CU_STATE}{BOLRPT_PRELIM.CU_POSTALCODE}{BOLRPT_PRELIM.CU_COUNTRYCODE}"), Position=(3.83, 1), Size=(2.83 x 0.7)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    119.1, Embedded Field: Database Field=CU_NAME
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    119.2, Embedded Field: Database Field=CU_ADDR1
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    119.3, Embedded Field: Database Field=CU_ADDR2
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    119.4, Embedded Field: Database Field=CU_CITY
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    119.5, Embedded Field: Database Field=CU_STATE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    119.6, Embedded Field: Database Field=CU_POSTALCODE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    119.7, Embedded Field: Database Field=CU_COUNTRYCODE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+    
+    120, Text: ("Remit COD check to:"), Position=(2.5, 1), Size=(1.33 x 0.18)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Right, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Arial, Size = 9
+      Paragraph: Line Spacing Type = Multiple
+    
+    121, Text: ("Company Check Acceptable"), Position=(2.92, 0.58), Size=(2.75 x 0.18)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Arial, Size = 9
+      Paragraph: Line Spacing Type = Multiple
+    
+    122, Text: ("(If box is not checked, cashiers check only)"), Position=(2.92, 0.83), Size=(2.72 x 0.17)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Arial, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+    
+    123, Text: ("     "), Position=(5.19, 0.42), Size=(0.25 x 0.24)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: Single, Color=Black
+      Font: Name = Times New Roman, Size = 9
+      Paragraph: Line Spacing Type = Multiple
+    
+    124, Text: ("X"), Position=(5.25, 0.42), Size=(0.25 x 0.35)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 22, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+  
+  Group Footer b #1
+  Height = 0.1, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    125, Text: ("****** END-OF-ORDER *******"), Position=(2.5, 0), Size=(2 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+  
+  Group Footer c #1
+  Height = 0.2, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    126, Subreport: Position=(2.25, 0), Size=(4.42 x 0.25)
+      Subreport: Subreport Name = pallet, Enable on Demand = False
+      Common: Can Grow = True, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+    
+  
+  Group Footer d #1
+  Height = 0.3, Keep Together, Reset Page Number After, Print at Bottom
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    127, Subreport: Position=(0.08, 0.08), Size=(6.67 x 0.23)
+      Subreport: Subreport Name = nmfc, Enable on Demand = False
+      Common: Can Grow = True, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+    
+  
+  
+  Report Footer
+  Suppressed, Height = 0, Keep Together
+    No objects in this section.
+    
+  
+  Page Footer
+  Height = 1.3, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    128, Text: ("[put company name and address here]"), Position=(5.28, 0.19), Size=(2.17 x 0.73)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+    
+    129, Text: ("For the Account of: (Shipper)"), Position=(0.1, 0.01), Size=(1.72 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    130, Text: ("{BOLRPT_PRELIM.CU_NAME}{BOLRPT_PRELIM.CUSTID}{BOLRPT_PRELIM.CU_ADDR1}{BOLRPT_PRELIM.CU_ADDR2}{BOLRPT_PRELIM.CU_CITY}{BOLRPT_PRELIM.CU_STATE}{BOLRPT_PRELIM.CU_POSTALCODE}{BOLRPT_PRELIM.CU_COUNTRYCODE}"), Position=(0.1, 0.19), Size=(2.83 x 1.05)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    130.1, Embedded Field: Database Field=CU_NAME
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    130.2, Embedded Field: Database Field=CUSTID
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    130.3, Embedded Field: Database Field=CU_ADDR1
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    130.4, Embedded Field: Database Field=CU_ADDR2
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    130.5, Embedded Field: Database Field=CU_CITY
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    130.6, Embedded Field: Database Field=CU_STATE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    130.7, Embedded Field: Database Field=CU_POSTALCODE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    130.8, Embedded Field: Database Field=CU_COUNTRYCODE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+    
+    131, Text: ("Send freight bill with copy of Bill of Lading to:"), Position=(5.22, 0.02), Size=(2.29 x 0.14)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    132, Text: ("{BOLRPT_PRELIM.CR_NAME}{BOLRPT_PRELIM.CR_ADDR1}{BOLRPT_PRELIM.CR_ADDR2}{BOLRPT_PRELIM.CR_CITY}{BOLRPT_PRELIM.CR_STATE}{BOLRPT_PRELIM.CR_POSTALCODE}{BOLRPT_PRELIM.CR_COUNTRYCODE}"), Position=(5.25, 0.19), Size=(2.68 x 0.7)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    132.1, Embedded Field: Database Field=CR_NAME
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    132.2, Embedded Field: Database Field=CR_ADDR1
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    132.3, Embedded Field: Database Field=CR_ADDR2
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    132.4, Embedded Field: Database Field=CR_CITY
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    132.5, Embedded Field: Database Field=CR_STATE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    132.6, Embedded Field: Database Field=CR_POSTALCODE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    132.7, Embedded Field: Database Field=CR_COUNTRYCODE
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+    
+    133, Text: ("I have received the above in good order:  Date:__________ Agent for: ___________________  By: ______________________________________
+											            Carrier					Agent or Driver"), Position=(0.08, 0.92), Size=(7.59 x 0.22)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    134, Text: ("Carrier: Above shippers Ref and Whse B/L number must appear on all freight bills."), Position=(0.08, 1.17), Size=(3.96 x 0.11)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+    135, Text: ("PrintDatePrintTime"), Position=(5.92, 1.11), Size=(2 x 0.17)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Right, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 9
+      Paragraph: Line Spacing Type = Multiple
+  
+    135.1, Embedded Field: Special Var Field=Print Date
+      Font: Name = Times New Roman, Size = 9
+      Paragraph: Line Spacing Type = Multiple
+  
+    135.2, Embedded Field: Special Var Field=Print Time
+      Font: Name = Times New Roman, Size = 9
+      Paragraph: Line Spacing Type = Multiple
+    
+  
+  
+  Subreport: bolcmts
+  Record Selection Formula
+    	{BOLCUSTCMTVIEW.ORDERID} = {?Pm-BOLRPT.OH_ORDERID} and
+{BOLCUSTCMTVIEW.SHIPID} = {?Pm-BOLRPT.OH_SHIPID}
+  
+  Parameters
+  Name, Description, Data Type
+    Pm-BOLRPT.OH_ORDERID, Pm-BOLRPT.OH_ORDERID, Number
+    Pm-BOLRPT.OH_SHIPID, Pm-BOLRPT.OH_SHIPID, Number
+  
+  
+  Record Sort Fields
+  Sort Field, Direction
+    ORDERID, Ascending
+    SHIPID, Ascending
+  
+  SQL Query
+    
+ SELECT "BOLCUSTCMTVIEW"."ORDERID", "BOLCUSTCMTVIEW"."SHIPID", "BOLCUSTCMTVIEW"."BOLCOMMENT"
+ FROM   "ALPS"."BOLCUSTCMTVIEWB" "BOLCUSTCMTVIEW"
+ WHERE  "BOLCUSTCMTVIEW"."ORDERID"=1 AND "BOLCUSTCMTVIEW"."SHIPID"=1
+ ORDER BY "BOLCUSTCMTVIEW"."ORDERID", "BOLCUSTCMTVIEW"."SHIPID"
+
+
+  
+  Tables
+  Table, Alias, Location, Driver
+    BOLCUSTCMTVIEW, , BOLCUSTCMTVIEWB, crdb_oracle.dll
+  	Column, DataType, Size
+    	{BOLCUSTCMTVIEW.ORDERID}, Integer (32 bit signed), 4
+    	{BOLCUSTCMTVIEW.SHIPID}, Integer (32 bit signed), 4
+    	{BOLCUSTCMTVIEW.BOLCOMMENT}, String, 8002
+  
+  
+  Areas
+  Report Header a
+  Suppressed, Height = 0, Keep Together
+    No objects in this section.
+    
+  Report Header b
+  Suppressed, Height = 0, Keep Together
+    No objects in this section.
+    
+  
+  Detail
+  Suppress if blank, Height = 0.1, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    0, Text: ("{BOLCUSTCMTVIEW.BOLCOMMENT}"), Position=(0.04, 0), Size=(2.62 x 0.14)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+  
+    0.1, Embedded Field: Database Field=BOLCOMMENT
+      Font: Name = Times New Roman, Size = 8
+      Paragraph: Line Spacing Type = Multiple
+    
+  
+  
+  Report Footer a
+  Suppressed, Height = 0, Keep Together
+    No objects in this section.
+    
+  Report Footer b
+  Suppressed, Height = 0, Keep Together
+    No objects in this section.
+    
+  
+  Subreport: pallet
+  Record Selection Formula
+    	{PALLETHISTORY.LOADNO} = {?Pm-WEBER_BOLRPT.OH_LOADNO}
+  
+  Parameters
+  Name, Description, Data Type
+    Pm-WEBER_BOLRPT.OH_LOADNO, Pm-WEBER_BOLRPT.OH_LOADNO, Number
+  
+  
+  SQL Query
+    
+ SELECT "PALLETHISTORY"."LOADNO", "PALLETTYPES"."ABBREV", "PALLETHISTORY"."OUTPALLETS", "PALLETHISTORY"."INPALLETS"
+ FROM   "ALPS"."PALLETHISTORY" "PALLETHISTORY", "ALPS"."PALLETTYPES" "PALLETTYPES"
+ WHERE  ("PALLETHISTORY"."PALLETTYPE"="PALLETTYPES"."CODE" (+)) AND "PALLETHISTORY"."LOADNO"=1
+
+
+  
+  Tables
+  Table, Alias, Location, Driver
+    PALLETHISTORY, , PALLETHISTORY, crdb_oracle.dll
+  	Column, DataType, Size
+    	{PALLETHISTORY.CUSTID}, String, 22
+    	{PALLETHISTORY.FACILITY}, String, 8
+    	{PALLETHISTORY.PALLETTYPE}, String, 26
+    	{PALLETHISTORY.ADJREASON}, String, 26
+    	{PALLETHISTORY.LOADNO}, Integer (32 bit signed), 4
+    	{PALLETHISTORY.LASTUSER}, String, 26
+    	{PALLETHISTORY.LASTUPDATE}, DateTime, 8
+    	{PALLETHISTORY.CARRIER}, String, 10
+    	{PALLETHISTORY.COMMENT1}, String, 162
+    	{PALLETHISTORY.ORDERID}, Integer (32 bit signed), 4
+    	{PALLETHISTORY.SHIPID}, Integer (32 bit signed), 4
+    	{PALLETHISTORY.INPALLETS}, Integer (32 bit signed), 4
+    	{PALLETHISTORY.OUTPALLETS}, Integer (32 bit signed), 4
+  
+    PALLETTYPES, , PALLETTYPES, crdb_oracle.dll
+  	Column, DataType, Size
+    	{PALLETTYPES.CODE}, String, 26
+    	{PALLETTYPES.DESCR}, String, 66
+    	{PALLETTYPES.ABBREV}, String, 26
+    	{PALLETTYPES.DTLUPDATE}, String, 4
+    	{PALLETTYPES.LASTUSER}, String, 26
+    	{PALLETTYPES.LASTUPDATE}, DateTime, 8
+  
+  Database Links
+  SourceTable, JoinType, Destination, LookupType
+    PALLETHISTORY.PALLETTYPE, Left Outer, PALLETTYPES.CODE, Product
+  
+  Areas
+  Report Header a
+  Suppressed, Height = 0, Keep Together
+    No objects in this section.
+    
+  Report Header b
+  Height = 0.1, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    0, Horizontal Line: Position=(0, 0.06), Size=(4.42 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+  
+  
+  Detail a
+  Height = 0.3, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    1, Text: ("{PALLETTYPES.ABBREV}{PALLETHISTORY.INPALLETS}"), Position=(0.08, 0.08), Size=(3.71 x 0.21)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Right, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 12
+      Paragraph: Line Spacing Type = Multiple
+  
+    1.1, Embedded Field: Database Field=ABBREV
+      Font: Name = Times New Roman, Size = 12
+      Paragraph: Line Spacing Type = Multiple
+  
+    1.2, Embedded Field: Database Field=INPALLETS
+      Font: Name = Times New Roman, Size = 12, Underline
+      Paragraph: Line Spacing Type = Multiple
+    
+  
+  Detail b
+  Height = 0.3, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    2, Text: ("{PALLETTYPES.ABBREV}{PALLETHISTORY.OUTPALLETS}"), Position=(0.08, 0.08), Size=(3.71 x 0.21)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Right, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 12
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.1, Embedded Field: Database Field=ABBREV
+      Font: Name = Times New Roman, Size = 12
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.2, Embedded Field: Database Field=OUTPALLETS
+      Font: Name = Times New Roman, Size = 12, Underline
+      Paragraph: Line Spacing Type = Multiple
+    
+  
+  
+  Report Footer
+  Height = 0, Keep Together
+    No objects in this section.
+    
+  
+  Subreport: nmfc
+  Record Selection Formula
+    	{BOLNMFC_PRELIM.ORDERID} = {?Pm-BOLRPT.OH_ORDERID} and
+{BOLNMFC_PRELIM.SHIPID} = {?Pm-BOLRPT.OH_SHIPID}
+and
+{BOLNMFC_PRELIM.SHIPID} = {?Pm-BOLRPT.OH_SHIPID}
+  
+  User Formulas
+  Name, Formula
+  @class_format, ToText ({BOLNMFC_PRELIM.CLASS})
+
+  
+  Parameters
+  Name, Description, Data Type
+    Pm-BOLRPT.OH_ORDERID, Pm-BOLRPT.OH_ORDERID, Number
+    Pm-BOLRPT.OH_SHIPID, Pm-BOLRPT.OH_SHIPID, Number
+  
+  Groups
+  Group, Field, Break On, Sort Direction
+    Group #1, {BOLNMFC_PRELIM.NMFC}, Any Value, Ascending
+  
+  Record Sort Fields
+  Sort Field, Direction
+    NMFC, Ascending
+  
+  SQL Query
+    
+ SELECT "BOLNMFC_PRELIM"."NMFC", "BOLNMFC_PRELIM"."ORDERID", "BOLNMFC_PRELIM"."DESCR", "BOLNMFC_PRELIM"."CLASS", "BOLNMFC_PRELIM"."SHIPID", "BOLNMFC_PRELIM"."CUBE", "BOLNMFC_PRELIM"."QTY", "BOLNMFC_PRELIM"."WEIGHT", "BOLNMFC_PRELIM"."GROSSWEIGHT"
+ FROM   "ALPS"."DRE_BOLNMFC_PRELIM" "BOLNMFC_PRELIM"
+ WHERE  "BOLNMFC_PRELIM"."ORDERID"=1 AND "BOLNMFC_PRELIM"."SHIPID"=1
+ ORDER BY "BOLNMFC_PRELIM"."NMFC"
+
+
+  
+  Tables
+  Table, Alias, Location, Driver
+    BOLNMFC_PRELIM, , DRE_BOLNMFC_PRELIM, crdb_oracle.dll
+  	Column, DataType, Size
+    	{BOLNMFC_PRELIM.ORDERID}, Integer (32 bit signed), 4
+    	{BOLNMFC_PRELIM.SHIPID}, Integer (32 bit signed), 4
+    	{BOLNMFC_PRELIM.NMFC}, String, 26
+    	{BOLNMFC_PRELIM.DESCR}, String, 512
+    	{BOLNMFC_PRELIM.CLASS}, Number, 8
+    	{BOLNMFC_PRELIM.QTY}, Number, 8
+    	{BOLNMFC_PRELIM.WEIGHT}, Number, 8
+    	{BOLNMFC_PRELIM.CUBE}, Number, 8
+    	{BOLNMFC_PRELIM.GROSSWEIGHT}, Number, 8
+  
+  
+  Areas
+  Report Header a
+  Suppressed, Height = 0, Keep Together
+    No objects in this section.
+    
+  Report Header b
+  Height = 0.2, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    0, Horizontal Line: Position=(0.01, 0.06), Size=(2.52 x 0)
+       Line Style = Single, Line Thickness = 40, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    1, Text: ("N.M.F.C."), Position=(2.59, 0.01), Size=(0.74 x 0.16)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    2, Horizontal Line: Position=(3.39, 0.05), Size=(3.2 x 0)
+       Line Style = Single, Line Thickness = 40, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+  
+  
+  Group Header #1
+  Suppressed, Height = 0, Keep Together
+    No objects in this section.
+    
+  
+  Detail
+  Height = 0.2, Keep Together
+      Conditional Formulas: 
+      Enable Suppress :  Previous ({BOLNMFC_PRELIM.DESCR})={BOLNMFC_PRELIM.DESCR}
+
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    3, Field Object: ("NMFC"), Position=(1.25, 0), Size=(0.98 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=NMFC
+    
+    4, Text: ("{BOLNMFC_PRELIM.DESCR}{BOLNMFC_PRELIM.CLASS}"), Position=(2.25, 0), Size=(3.67 x 0.16)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+  
+    4.1, Embedded Field: Database Field=DESCR
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+  
+    4.2, Embedded Field: Database Field=CLASS
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+  
+  
+  Group Footer #1
+  Height = 0, Keep Together
+    No objects in this section.
+    
+  
+  Report Footer
+  Height = 0.3, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    5, Text: ("Order Totals "), Position=(2.26, 0.09), Size=(0.99 x 0.16)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 11, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    6, Horizontal Line: Position=(0, 0), Size=(6.58 x 0)
+       Line Style = Single, Line Thickness = 50, Line Color = Black, Extend to Bottom of Section = False, Suppress = False
+    
+    7, Text: ("Qty"), Position=(0.01, 0.09), Size=(0.33 x 0.25)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 11, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    8, Text: ("Net"), Position=(4.48, 0.09), Size=(0.3 x 0.16)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 11, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    9, Text: ("Cube"), Position=(3.44, 0.09), Size=(0.45 x 0.16)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Right, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 11, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    10, Field Object: ("Sum of BOLNMFC_PRELIM.CUBE"), Position=(3.97, 0.09), Size=(0.41 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 11, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = False, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of CUBE]
+    
+    11, Field Object: ("Sum of BOLNMFC_PRELIM.QTY"), Position=(0.44, 0.09), Size=(0.67 x 0.15)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of QTY]
+    
+    12, Field Object: ("Sum of BOLNMFC_PRELIM.WEIGHT"), Position=(4.84, 0.09), Size=(0.6 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of WEIGHT]
+    
+    13, Text: ("Gross"), Position=(5.48, 0.09), Size=(0.45 x 0.16)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 11, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    14, Field Object: ("Sum of BOLNMFC_PRELIM.GROSSWEIGHT"), Position=(6.05, 0.09), Size=(0.38 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Summarized Field = [Sum of GROSSWEIGHT]
+    
+  
+  
