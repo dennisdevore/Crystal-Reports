@@ -1,0 +1,451 @@
+Report File: DRESTKACTDT.rpt
+Report File DateTime: 30-Nov-2005 at 11:44:54
+
+Report Miner, Version 3.0 - Copyright 1999-2001, The Retsel Group
+  
+  Report Summary Information
+    Title = 
+    Author = $Id: DRESTKACTDT.rmd 436 2005-11-30 18:22:17Z brad $
+    Keywords = 
+    Comments = DRESTKACTDT
+    Subject = 
+    Template = DREStockActivityByDate
+  
+  Report Statistics
+    Last Saved By = 
+    Revision Number = -1
+    Total Edit Time = 0
+    Last Printed = 12:00:00 AM
+    Created = 12:00:00 AM
+    Last Saved = 12:00:00 AM
+  
+  Report Options
+    Report Kind = Columnar Report
+    Convert Date Time Type = Keep Date and Time
+    Enable Asynchronous Query = False
+    Enable Generating Data for Hidden Object = True
+    Enable Parameter Prompting = True
+    Enable Select Distinct Records = False
+    Field Mapping Type = Auto Field Mapping
+    Formula Syntax = Crystal Syntax
+    Convert null field value to default = False
+    Case-insensitive SQL data = True
+    Field Mapping Type = Auto Field Mapping
+    Formula Syntax Type = Crystal Syntax
+    Last Get Formula Syntax = Crystal Syntax
+    Can Perform Grouping on Server = False
+    Has Saved Data = False
+    Verify on Every Print = False
+    Use Index for Speed = True
+    Save Preview Picture = False
+    Need Updated Pages = True
+    Perform Grouping on Server = False
+  
+  Page Setup
+    Top Margin = 240
+    Bottom Margin = 240
+    Left Margin = 360
+    Right Margin = 360
+  
+  Printer Details
+    Printer Name = 
+    Printer Driver = 
+    Printer Port = 
+    Printer Duplex Option = 0
+    Paper Orientation = Default Orientation
+    Paper Size = Default
+    Paper Source = Auto
+    Total Number of Pages = 
+    Print Date = 11/30/2005
+  
+  User Formulas
+  Name, Formula
+  @begdate, date({?IN_BEGDATE})
+
+  @enddate, date({?IN_ENDDATE})
+
+  @itemcode, if {ASOFINVACTLOTPROC.TRANTYPE} = 'AA' or
+   {ASOFINVACTLOTPROC.TRANTYPE} = 'ZZ'
+then
+  {ASOFINVACTLOTPROC.ITEM}
+
+  @trandesc, if {ASOFINVACTLOTPROC.TRANTYPE} = 'AA' then 'Opening Balance' 
+else
+if {ASOFINVACTLOTPROC.TRANTYPE} = 'ZZ' then 'Closing Balance' 
+else
+if {ASOFINVACTLOTPROC.DTLTRANTYPE} = 'AD' then {ASOFINVACTLOTPROC.REASON}
+else if isnull({ASOFINVACTLOTPROC.REFERENCE}) then
+  ToText ({ASOFINVACTLOTPROC.ORDERID},0,'') + '-' + totext ({ASOFINVACTLOTPROC.SHIPID},0)
+else
+    ToText ({ASOFINVACTLOTPROC.ORDERID},0,'') + '-' + totext ({ASOFINVACTLOTPROC.SHIPID},0) + '/' +
+  ToText ({ASOFINVACTLOTPROC.REFERENCE})
+
+
+  @trandate, if {ASOFINVACTLOTPROC.TRANTYPE} = 'AA' then {@begdate} 
+else if {ASOFINVACTLOTPROC.TRANTYPE} = 'ZZ' then {@enddate} 
+else {ASOFINVACTLOTPROC.EFFDATE}
+
+  @itemdesc, if {ASOFINVACTLOTPROC.TRANTYPE} = 'AA'
+then {ASOFINVACTLOTPROC.ITEMDESC}
+else
+if {ASOFINVACTLOTPROC.TRANTYPE} = 'DT' then 
+    if{ASOFINVACTLOTPROC.DTLTRANTYPE} = 'AD' then 'Adjustment ('+{ASOFINVACTLOTPROC.INVABBR}+')'
+        else if {ASOFINVACTLOTPROC.DTLTRANTYPE} = 'SH' then 'Shipment ' 
+             else if {ASOFINVACTLOTPROC.DTLTRANTYPE} = 'RC' then 'Receipt '
+                  else if {ASOFINVACTLOTPROC.DTLTRANTYPE} = 'RT' then 'Return '
+
+  @conssuppname, if {ASOFINVACTLOTPROC.DTLTRANTYPE} in ['SH', 'RC', 'RT'] then {ASOFINVACTLOTPROC.CONSIGNEE_OR_SUPPLIER_NAME}
+ 
+
+  @codedate, if {ASOFINVACTLOTPROC.TRANTYPE} = 'AA' or
+   {ASOFINVACTLOTPROC.TRANTYPE} = 'ZZ'
+then
+  {ASOFINVACTLOTPROC.ADDLINFO}
+  @lotnumber, if {ASOFINVACTLOTPROC.TRANTYPE} = 'AA' or
+   {ASOFINVACTLOTPROC.TRANTYPE} = 'ZZ'
+then
+  {ASOFINVACTLOTPROC.LOTNUMBER}
+  
+  Parameters
+  Name, Description, Data Type
+    IN_CUSTID, , String
+    IN_FACILITY, , String
+    IN_ITEM, , String
+    IN_BEGDATE, , DateTime
+    IN_ENDDATE, , DateTime
+    IN_DEBUG_YN, , String
+  
+  
+  SQL Query
+    
+BEGIN "ALPS"."DRE_ASOFINVACTLOTPROC"(:AOI_CURSOR, N'CCC', N'107', N'ALL', TO_DATE ('04-12-1941 00:00:00', 'DD-MM-YYYY HH24:MI:SS'), TO_DATE ('07-12-1941 00:00:00', 'DD-MM-YYYY HH24:MI:SS'), N''); END ;
+
+
+  
+  Tables
+  Table, Alias, Location, Driver
+    ASOFINVACTLOTPROC, , DRE_ASOFINVACTLOTPROC, crdb_oracle.dll
+  	Column, DataType, Size
+    	{ASOFINVACTLOTPROC.SESSIONID}, Number, 8
+    	{ASOFINVACTLOTPROC.FACILITY}, String, 8
+    	{ASOFINVACTLOTPROC.CUSTID}, String, 22
+    	{ASOFINVACTLOTPROC.ITEM}, String, 42
+    	{ASOFINVACTLOTPROC.LOTNUMBER}, String, 62
+    	{ASOFINVACTLOTPROC.UOM}, String, 10
+    	{ASOFINVACTLOTPROC.INVSTATUS}, String, 6
+    	{ASOFINVACTLOTPROC.INVENTORYCLASS}, String, 6
+    	{ASOFINVACTLOTPROC.TRANTYPE}, String, 6
+    	{ASOFINVACTLOTPROC.DTLTRANTYPE}, String, 6
+    	{ASOFINVACTLOTPROC.EFFDATE}, DateTime, 8
+    	{ASOFINVACTLOTPROC.QTY}, Number, 8
+    	{ASOFINVACTLOTPROC.ITEMDESC}, String, 82
+    	{ASOFINVACTLOTPROC.INVSTATUSABBREV}, String, 26
+    	{ASOFINVACTLOTPROC.INVENTORYCLASSABBREV}, String, 26
+    	{ASOFINVACTLOTPROC.CUSTNAME}, String, 82
+    	{ASOFINVACTLOTPROC.CUSTADDR1}, String, 82
+    	{ASOFINVACTLOTPROC.CUSTADDR2}, String, 82
+    	{ASOFINVACTLOTPROC.CUSTCITY}, String, 62
+    	{ASOFINVACTLOTPROC.CUSTSTATE}, String, 6
+    	{ASOFINVACTLOTPROC.CUSTZIP}, String, 26
+    	{ASOFINVACTLOTPROC.REPORTTITLE}, String, 512
+    	{ASOFINVACTLOTPROC.ORDERID}, Number, 8
+    	{ASOFINVACTLOTPROC.SHIPID}, Number, 8
+    	{ASOFINVACTLOTPROC.REASON}, String, 26
+    	{ASOFINVACTLOTPROC.CONSIGNEE_OR_SUPPLIER}, String, 22
+    	{ASOFINVACTLOTPROC.CONSIGNEE_OR_SUPPLIER_NAME}, String, 82
+    	{ASOFINVACTLOTPROC.LASTUPDATE}, DateTime, 8
+    	{ASOFINVACTLOTPROC.REFERENCE}, String, 42
+    	{ASOFINVACTLOTPROC.PO}, String, 42
+    	{ASOFINVACTLOTPROC.BILLOFLADING}, String, 82
+    	{ASOFINVACTLOTPROC.WEIGHT}, Number, 8
+    	{ASOFINVACTLOTPROC.ADDLINFO}, String, 42
+    	{ASOFINVACTLOTPROC.INVSTAT}, String, 6
+    	{ASOFINVACTLOTPROC.INVABBR}, String, 26
+  
+  
+  Areas
+  Report Header
+  Height = 0.7, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    0, Text: ("{ASOFINVACTLOTPROC.CUSTNAME}{ASOFINVACTLOTPROC.CUSTADDR1}{ASOFINVACTLOTPROC.CUSTADDR2}{ASOFINVACTLOTPROC.CUSTCITY}{ASOFINVACTLOTPROC.CUSTSTATE}{ASOFINVACTLOTPROC.CUSTZIP}"), Position=(0.03, 0.02), Size=(3.92 x 0.67)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+  
+    0.1, Embedded Field: Database Field=CUSTNAME
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+  
+    0.2, Embedded Field: Database Field=CUSTADDR1
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+  
+    0.3, Embedded Field: Database Field=CUSTADDR2
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+  
+    0.4, Embedded Field: Database Field=CUSTCITY
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+  
+    0.5, Embedded Field: Database Field=CUSTSTATE
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+  
+    0.6, Embedded Field: Database Field=CUSTZIP
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+    
+    1, Ole Object: Position=(6.08, 0.08), Size=(1.86 x 0.3)
+      Picture: X Scaling = 1, Y Scaling = 0.545, ScaledWidth = 0, ScaledHeight = 0
+      Border: None
+      Common: Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+    
+  
+  
+  Page Header
+  Height = 1.8, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    2, Text: ("{@begdate}{@enddate}"), Position=(0, 0.21), Size=(7.97 x 0.43)
+      Common: Can Grow = True, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 14, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.1, Embedded Field: Summary Field=begdate
+      Font: Name = Times New Roman, Size = 12
+      Paragraph: Line Spacing Type = Multiple
+  
+    2.2, Embedded Field: Summary Field=enddate
+      Font: Name = Times New Roman, Size = 12
+      Paragraph: Line Spacing Type = Multiple
+    
+    3, Field Object: ("REPORTTITLE"), Position=(0.02, 0.01), Size=(7.99 x 0.17)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 12
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=REPORTTITLE
+    
+    4, Field Object: ("IN_ITEM"), Position=(1.24, 1.08), Size=(3.92 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Parameter Field=IN_ITEM
+    
+    5, Text: ("Item"), Position=(0.01, 1.08), Size=(1.21 x 0.16)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+    
+    6, Field Object: ("IN_FACILITY"), Position=(1.24, 0.87), Size=(3.9 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Parameter Field=IN_FACILITY
+    
+    7, Text: ("Facility"), Position=(0.01, 0.87), Size=(1.21 x 0.16)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+    
+    8, Field Object: ("IN_CUSTID"), Position=(1.24, 0.68), Size=(3.9 x 0.16)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Parameter Field=IN_CUSTID
+    
+    9, Text: ("Customer"), Position=(0.01, 0.67), Size=(1.21 x 0.16)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+    
+    10, Text: ("WEIGHT"), Position=(7.33, 1.58), Size=(0.64 x 0.18)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Underline, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    11, Text: ("QTY"), Position=(6.86, 1.59), Size=(0.43 x 0.17)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Underline, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    12, Text: ("TRANSACTION"), Position=(5.77, 1.59), Size=(1.1 x 0.17)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Underline, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    13, Text: ("UOM"), Position=(5.35, 1.59), Size=(0.38 x 0.17)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Underline, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    14, Text: ("DATE"), Position=(4.64, 1.59), Size=(0.61 x 0.17)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Underline, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    15, Text: ("LOT"), Position=(2.83, 1.59), Size=(0.62 x 0.17)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Underline, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    16, Text: ("DESCRIPTION"), Position=(0.67, 1.58), Size=(2.08 x 0.18)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Underline, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    17, Text: ("ITEM"), Position=(0.02, 1.59), Size=(0.56 x 0.17)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Underline, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    18, Text: ("BALANCE"), Position=(6.83, 1.38), Size=(1.09 x 0.17)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+    19, Field Object: ("PageNofM"), Position=(7.14, 0), Size=(0.83 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Special Var Field=Page N of M
+    
+    20, Field Object: ("PrintDate"), Position=(7.15, 0.17), Size=(0.82 x 0.14)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Date: CalendarType = Gregorian, Day type = Numeric, Era type = None, First Separator = /, Leading Day Position = Leading, Leading Day Type = None, Month Type = Numeric, Date Order = Month Day Year, Second Separator = /, Year Type = Long
+      Font: Name = Times New Roman, Size = 10
+      Field: Special Var Field=Print Date
+    
+    21, Text: ("CODE DATE"), Position=(3.58, 1.58), Size=(1.03 x 0.18)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10, Underline, Style = Bold
+      Paragraph: Line Spacing Type = Multiple
+    
+  
+  
+  Detail a
+  Height = 0.2, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    22, Field Object: ("@itemcode"), Position=(0, 0), Size=(0.58 x 0.18)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Summary Field=itemcode
+    
+    23, Field Object: ("WEIGHT"), Position=(7.33, 0), Size=(0.55 x 0.18)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Database Field=WEIGHT
+    
+    24, Field Object: ("QTY"), Position=(6.86, 0), Size=(0.43 x 0.18)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Number: Decimal Places = 0, Decimal Symbol = ., Display Reverse Sign = False, Negative Type = Leading Minus, Rounding Type = Nearest Unit, Thousands Separator = True, Thousands Symbol = ,, Zero Value String = <Default Format>
+      Field: Database Field=QTY
+    
+    25, Field Object: ("@trandesc"), Position=(5.77, 0), Size=(1.1 x 0.18)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Summary Field=trandesc
+      Conditional Formulas: 
+      Font Style:  iif({ASOFINVACTLOTPROC.TRANTYPE}='AA',3,iif({ASOFINVACTLOTPROC.TRANTYPE}='ZZ',3,0))
+
+    
+    26, Field Object: ("UOM"), Position=(5.35, 0), Size=(0.38 x 0.18)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Database Field=UOM
+    
+    27, Field Object: ("@trandate"), Position=(4.64, 0), Size=(0.68 x 0.18)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Center, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Date: CalendarType = Gregorian, Day type = Leading Zero Numeric, Era type = None, First Separator = /, Leading Day Position = Leading, Leading Day Type = None, Month Type = Leading Zero Numeric, Date Order = Month Day Year, Second Separator = /, Year Type = Long
+      DateTime: Date Windows Default Type = Not Using Windows Defaults
+      Font: Name = Times New Roman, Size = 10
+      Time: AmPm Position = 1, AM String =  am, PM String =  pm, Hour Minute Separator = :, Minute Second Separator = , Hour Type = 1, Minute Type = 0, Second Type = 2, Time Base = 24 Hour, Use Leading Zero = True, Use System Defaults = False
+      Field: Summary Field=trandate
+    
+    28, Text: ("{@itemdesc}{@conssuppname}"), Position=(0.67, 0), Size=(2.08 x 0.18)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+  
+    28.1, Embedded Field: Summary Field=itemdesc
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+  
+    28.2, Embedded Field: Summary Field=conssuppname
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+    
+    29, Field Object: ("@codedate"), Position=(3.58, 0), Size=(1.07 x 0.18)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Summary Field=codedate
+    
+    30, Field Object: ("@lotnumber"), Position=(2.83, 0), Size=(0.75 x 0.18)
+      Border: None
+      Common: Can Grow = False, Close Border on Page Break = True, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Font: Name = Times New Roman, Size = 10
+      Paragraph: Line Spacing Type = Multiple
+      Field: Summary Field=lotnumber
+    
+  
+  Detail b
+  Height = 0.1, Keep Together
+      Conditional Formulas: 
+      Enable Suppress :  //previous({ASOFINVACTLOTPROC.ITEM})={ASOFINVACTLOTPROC.ITEM}
+{ASOFINVACTLOTPROC.TRANTYPE} <> 'ZZ'
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    31, Horizontal Line: Position=(0, 0.06), Size=(7.99 x 0)
+       Line Style = Single, Line Thickness = 20, Line Color = Gray, Extend to Bottom of Section = False, Suppress = False
+    
+  
+  
+  Report Footer
+  Height = 0, Keep Together
+    No objects in this section.
+    
+  
+  Page Footer
+  Height = 0.4, Keep Together
+    Name, Location(LxT), Size (WxH), Type, Contents, Suppress
+    32, Text: ("DRESALOT v113005"), Position=(7.12, 0.29), Size=(0.82 x 0.09)
+      Common: Can Grow = False, Close Border on Page Break = True, Horizontal Alignment = Left, Keep Together = True, Suppress = False, Suppress Embedded = False, Suppress if Duplicated = False
+      Border: None
+      Font: Name = Times New Roman, Size = 6
+      Paragraph: Line Spacing Type = Multiple
+    
+  
+  
