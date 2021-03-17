@@ -1,0 +1,45 @@
+--
+-- $Id$
+--
+insert into tbl_global_label_repository values(337,3,0,'Supplier not found.',null,0);
+commit;
+insert into tbl_global_label_repository values(336,3,0,'Lot number required.',null,0);
+commit;
+insert into tbl_global_label_repository values(335,3,0,'Lot number invalif.',null,0);
+commit;
+insert into tbl_global_label_repository values(334,3,0,'Special characters not allowed.',null,0);
+commit;
+insert into tbl_global_label_repository values(333,3,0,'Duplicate values not allowed.',null,0);
+commit;
+insert into tbl_global_label_repository values(332,3,0,'MOD10 check failed.',null,0);
+commit;
+insert into tbl_global_label_repository values(331,3,0,'Lot number does not match mask.',null,0);
+commit; 
+insert into tbl_global_label_repository values(330,3,0,'Lot number missing numeric value.',null,0);
+commit;
+insert into tbl_global_label_repository values(329,3,0,'Lot number missing alphanumeric value.',null,0);
+commit;
+insert into tbl_global_label_repository values(328,3,0,'Lot number has an invalid numeric value.',null,0);
+commit;
+insert into tbl_global_label_repository values(327,3,0,'Lot number has an invalid nonalphanumeric value.',null,0);
+commit;
+insert into tbl_global_label_repository values(326,3,0,'Lot number is too long.',null,0);
+commit;
+insert into tbl_global_label_repository values(325,3,0,'Lot number is too short.',null,0);
+commit;
+insert into tbl_global_label_repository values(324,3,0,'Lot number format rule not found.',null,0);
+commit; 
+insert into tbl_global_label_repository values(323,3,0,'Invalid customer id.',null,0);
+commit;
+insert into tbl_global_label_repository values(322,3,0,'Invalid data type.',null,0);
+commit;
+insert into tbl_global_label_repository values(321,3,0,'Item not found.',null,0);
+commit;
+insert into tbl_global_label_repository values(320,3,0,'Facility not found.',null,0);
+commit;
+insert into tbl_global_label_repository values(319,3,0,'Carrier not found.',null,0);
+commit;
+insert into tbl_global_label_repository values(318,3,0,'Bill to not found.',null,0);
+commit;
+insert into tbl_global_label_repository values(317,3,0,'Ship to not found.',null,0);
+commit;

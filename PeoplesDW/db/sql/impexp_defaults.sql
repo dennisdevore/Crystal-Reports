@@ -1,0 +1,30 @@
+insert into systemdefaults
+       (
+        defaultid,
+        defaultvalue,
+        lastuser,
+        lastupdate
+       )
+       values
+       (
+       'IMPEXP_TRADITIONAL',
+       'Y',
+       'SUP',
+       sysdate
+       );
+insert into systemdefaults
+       (
+        defaultid,
+        defaultvalue,
+        lastuser,
+        lastupdate
+       )
+       values
+       (
+       'IMPEXP_TABLE',
+       'N',
+       'SUP',
+       sysdate
+       );
+commit;
+exit;

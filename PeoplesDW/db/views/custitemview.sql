@@ -1,0 +1,1792 @@
+create or replace view custproductgroupview
+(CUSTID,
+custname,
+PRODUCTGROUP,
+PRODUCTGROUPDESCR,
+PRODUCTGROUPABBREV,
+RATEGROUP,
+RATEGROUPDESCR,
+LOTREQUIRED,
+LOTRFTAG,
+SERIALREQUIRED,
+SERIALRFTAG,
+USER1REQUIRED,
+USER1RFTAG,
+USER2REQUIRED,
+USER2RFTAG,
+USER3REQUIRED,
+USER3RFTAG,
+MFGDATEREQUIRED,
+EXPDATEREQUIRED,
+NODAMAGED,
+COUNTRYREQUIRED,
+BACKORDER,
+ALLOWSUB,
+INVSTATUSIND,
+INVSTATUS,
+INVCLASSIND,
+INVENTORYCLASS,
+QTYTYPE,
+VARIANCEPCT,
+VARIANCEPCT_OVERAGE,
+SUBSLPRSNREQUIRED,
+FIFOWINDOWDAYS,
+MAXQTYOF1,
+LOTFMTRULEID,
+LOTFMTACTION,
+SERIALFMTRULEID,
+SERIALFMTACTION,
+USER1FMTRULEID,
+USER1FMTACTION,
+USER2FMTRULEID,
+USER2FMTACTION,
+USER3FMTRULEID,
+USER3FMTACTION,
+ordercheckrequired,
+weightcheckrequired,
+PUTAWAYCONFIRMATION,
+status,
+parseruleid,
+parseentryfield,
+parseruleaction,
+returnsdisposition,
+critlevel1,
+critlevel2,
+critlevel3,
+serialasncapture,
+user1asncapture,
+user2asncapture,
+user3asncapture,
+use_catch_weights,
+catch_weight_out_cap_type,
+require_cyclecount_item,
+use_fifo,
+prtlps_on_load_arrival,
+prtlps_profid,
+prtlps_def_handling,
+prtlps_putaway_dir,
+putaway_highest_whole_uom_yn,
+use_min_units_qty,
+min_units_qty,
+use_multiple_units_qty,
+multiple_units_qty,
+min0qtysuspenseweight,
+system_generated_lps,
+capture_pickuom,
+require_phyinv_item,
+track_picked_pf_lps,
+require_cyclecount_lot,
+require_phyinv_lot,
+locstatuschg_loctype,
+locstatuschg_entry_invstatus,
+locstatuschg_entry_adjreason,
+locstatuschg_exit_invstatus,
+locstatuschg_exit_adjreason,
+locstatuschg_exclude_tasktypes,
+rcpt_qty_is_full_qty,
+use_entered_weight_yn,
+restrict_lot_sub,
+rec_qty_remains
+)
+as
+select
+customer.custid
+,customer.name
+,custproductgroup.productgroup
+,custproductgroup.descr
+,custproductgroup.ABBREV
+,decode(nvl(custproductgroup.RATEGROUP,'C'),'C',customer.rategroup,custproductgroup.rategroup)
+,substr(zrt.rategroup_abbrev(customer.custid,decode(nvl(custproductgroup.RATEGROUP,'C'),'C',customer.rategroup,custproductgroup.rategroup)),1,12)
+,decode(nvl(custproductgroup.LOTREQUIRED,'C'),'C',nvl(customer.lotrequired,'N'),custproductgroup.lotrequired)
+,nvl(custproductgroup.LOTRFTAG,nvl(customer.lotrftag,'LOT'))
+,decode(nvl(custproductgroup.SERIALREQUIRED,'C'),'C',nvl(customer.serialrequired,'N'),custproductgroup.serialrequired)
+,nvl(custproductgroup.SERIALRFTAG,nvl(customer.serialrftag,'SN'))
+,decode(nvl(custproductgroup.USER1REQUIRED,'C'),'C',nvl(customer.user1required,'N'),custproductgroup.user1required)
+,nvl(custproductgroup.USER1RFTAG,nvl(customer.user1rftag,'UITM1'))
+,decode(nvl(custproductgroup.USER2REQUIRED,'C'),'C',nvl(customer.user2required,'N'),custproductgroup.user2required)
+,nvl(custproductgroup.USER2RFTAG,nvl(customer.user2rftag,'UITM2'))
+,decode(nvl(custproductgroup.USER3REQUIRED,'C'),'C',nvl(customer.user3required,'N'),custproductgroup.user3required)
+,nvl(custproductgroup.USER3RFTAG,nvl(customer.user3rftag,'UITM3'))
+,decode(nvl(custproductgroup.MFGDATEREQUIRED,'C'),'C',nvl(customer.mfgdaterequired,'N'),custproductgroup.mfgdaterequired)
+,decode(nvl(custproductgroup.EXPDATEREQUIRED,'C'),'C',nvl(customer.expdaterequired,'N'),custproductgroup.expdaterequired)
+,decode(nvl(custproductgroup.NODAMAGED,'C'),'C',nvl(customer.nodamaged,'N'),custproductgroup.nodamaged)
+,decode(nvl(custproductgroup.COUNTRYREQUIRED,'C'),'C',nvl(customer.countryrequired,'N'),custproductgroup.countryrequired)
+,decode(nvl(custproductgroup.backorder,'C'),'C',nvl(customer.backorder,'N'),custproductgroup.backorder)
+,decode(nvl(custproductgroup.allowsub,'C'),'C',nvl(customer.allowsub,'N'),custproductgroup.allowsub)
+,decode(nvl(custproductgroup.invstatusind,'C'),'C',nvl(customer.invstatusind,'I'),custproductgroup.invstatusind)
+,decode(nvl(custproductgroup.invstatusind,'C'),'C',customer.invstatus,custproductgroup.invstatus)
+,decode(nvl(custproductgroup.invclassind,'C'),'C',nvl(customer.invclassind,'I'),custproductgroup.invclassind)
+,decode(nvl(custproductgroup.invclassind,'C'),'C',customer.inventoryclass,custproductgroup.inventoryclass)
+,decode(nvl(custproductgroup.qtytype,'C'),'C',nvl(customer.qtytype,'E'),custproductgroup.qtytype)
+,decode(nvl(custproductgroup.variancepct_use_default,'Y'),'N',nvl(custproductgroup.variancepct,0),nvl(customer.variancepct,0))
+,decode(nvl(custproductgroup.variancepct_use_default,'Y'),'N',nvl(custproductgroup.variancepct_overage,0),nvl(customer.variancepct_overage,0))
+,decode(nvl(custproductgroup.subslprsnrequired,'C'),'C',nvl(customer.subslprsnrequired,'N'),custproductgroup.subslprsnrequired)
+,decode(custproductgroup.use_fifo,'C',customer.fifowindowdays,'Y',custproductgroup.fifowindowdays,null)
+,decode(nvl(custproductgroup.maxqtyof1,'C'),'C',nvl(customer.maxqtyof1,'N'),custproductgroup.maxqtyof1)
+,nvl(custproductgroup.lotfmtruleid,customer.lotfmtruleid)
+,decode(nvl(custproductgroup.lotfmtaction,'C'),'C',nvl(customer.lotfmtaction,'W'),custproductgroup.lotfmtaction)
+,nvl(custproductgroup.serialfmtruleid,customer.serialfmtruleid)
+,decode(nvl(custproductgroup.serialfmtaction,'C'),'C',nvl(customer.serialfmtaction,'W'),custproductgroup.serialfmtaction)
+,nvl(custproductgroup.user1fmtruleid,customer.user1fmtruleid)
+,decode(nvl(custproductgroup.user1fmtaction,'C'),'C',nvl(customer.user1fmtaction,'W'),custproductgroup.user1fmtaction)
+,nvl(custproductgroup.user2fmtruleid,customer.user2fmtruleid)
+,decode(nvl(custproductgroup.user2fmtaction,'C'),'C',nvl(customer.user2fmtaction,'W'),custproductgroup.user2fmtaction)
+,nvl(custproductgroup.user3fmtruleid,customer.user3fmtruleid)
+,decode(nvl(custproductgroup.user3fmtaction,'C'),'C',nvl(customer.user3fmtaction,'W'),custproductgroup.user3fmtaction)
+,decode(nvl(custproductgroup.ordercheckrequired,'C'),'C',nvl(customer.ordercheckrequired,'N'),custproductgroup.ordercheckrequired)
+,decode(nvl(custproductgroup.weightcheckrequired,'C'),'C',nvl(customer.weightcheckrequired,'N'),custproductgroup.weightcheckrequired)
+,decode(nvl(custproductgroup.putawayconfirmation,'C'),'C',nvl(customer.putawayconfirmation,'1'),custproductgroup.putawayconfirmation)
+,custproductgroup.status
+,nvl(custproductgroup.parseruleid,customer.parseruleid)
+,nvl(custproductgroup.parseentryfield,customer.parseentryfield)
+,decode(nvl(custproductgroup.parseruleaction,'C'),'C',nvl(customer.parseruleaction,'N'),custproductgroup.parseruleaction)
+,nvl(custproductgroup.returnsdisposition, customer.returnsdisposition)
+,nvl(custproductgroup.critlevel1,30)
+,nvl(custproductgroup.critlevel2,60)
+,nvl(custproductgroup.critlevel3,90)
+,decode(nvl(custproductgroup.serialasncapture,'C'),'C',nvl(customer.serialasncapture,'N'),custproductgroup.serialasncapture)
+,decode(nvl(custproductgroup.user1asncapture,'C'),'C',nvl(customer.user1asncapture,'N'),custproductgroup.user1asncapture)
+,decode(nvl(custproductgroup.user2asncapture,'C'),'C',nvl(customer.user2asncapture,'N'),custproductgroup.user2asncapture)
+,decode(nvl(custproductgroup.user3asncapture,'C'),'C',nvl(customer.user3asncapture,'N'),custproductgroup.user3asncapture)
+,decode(nvl(custproductgroup.use_catch_weights,'C'),'C',nvl(customer.use_catch_weights,'N'),custproductgroup.use_catch_weights)
+,nvl(custproductgroup.catch_weight_out_cap_type,customer.catch_weight_out_cap_type)
+,decode(nvl(custproductgroup.require_cyclecount_item,'C'),'C',nvl(customer.require_cyclecount_item,'Y'),custproductgroup.require_cyclecount_item)
+,custproductgroup.use_fifo
+,customer.prtlps_on_load_arrival
+,customer.prtlps_profid
+,customer.prtlps_def_handling
+,customer.prtlps_putaway_dir
+,decode(nvl(custproductgroup.putaway_highest_whole_uom_yn,'C'),
+   'C', nvl(customer.putaway_highest_whole_uom_yn,'N'),
+        custproductgroup.putaway_highest_whole_uom_yn)
+,use_min_units_qty
+,min_units_qty
+,use_multiple_units_qty
+,multiple_units_qty
+,nvl(custproductgroup.min0qtysuspenseweight, customer_aux.min0qtysuspenseweight)
+,customer_aux.system_generated_lps
+,decode(nvl(custproductgroup.capture_pickuom,'C'),
+   'C', nvl(customer_aux.capture_pickuom,'N'),
+        custproductgroup.capture_pickuom)
+,decode(nvl(custproductgroup.locstatuschg_loctype,'C'),'C',
+        nvl(customer_aux.locstatuschg_loctype,'n/a'),
+        custproductgroup.locstatuschg_loctype)
+,decode(nvl(custproductgroup.locstatuschg_entry_invstatus,'C'),'C',
+        nvl(customer_aux.locstatuschg_entry_invstatus,'n/a'),
+        custproductgroup.locstatuschg_entry_invstatus)
+,decode(nvl(custproductgroup.locstatuschg_entry_adjreason,'C'),'C',
+        nvl(customer_aux.locstatuschg_entry_adjreason,'n/a'),
+        custproductgroup.locstatuschg_entry_adjreason)
+,decode(nvl(custproductgroup.locstatuschg_exit_invstatus,'C'),'C',
+        nvl(customer_aux.locstatuschg_exit_invstatus,'n/a'),
+        custproductgroup.locstatuschg_exit_invstatus)
+,decode(nvl(custproductgroup.locstatuschg_exit_adjreason,'C'),'C',
+        nvl(customer_aux.locstatuschg_exit_adjreason,'n/a'),
+        custproductgroup.locstatuschg_exit_adjreason)
+,nvl(custproductgroup.locstatuschg_exclude_tasktypes,customer_aux.locstatuschg_exclude_tasktypes)
+,decode(nvl(custproductgroup.require_phyinv_item,'C'),'C',nvl(customer_aux.require_phyinv_item,'Y'),custproductgroup.require_phyinv_item)
+,decode(nvl(custproductgroup.track_picked_pf_lps,'C'),
+   'C', nvl(customer_aux.track_picked_pf_lps,'N'),
+        custproductgroup.track_picked_pf_lps)
+,decode(nvl(custproductgroup.require_cyclecount_lot,'C'),'C',nvl(customer_aux.require_cyclecount_lot,'Y'),custproductgroup.require_cyclecount_lot)
+,decode(nvl(custproductgroup.require_phyinv_lot,'C'),'C',nvl(customer_aux.require_phyinv_lot,'Y'),custproductgroup.require_phyinv_lot)
+,decode(nvl(custproductgroup.rcpt_qty_is_full_qty,'C'),
+   'C', nvl(customer_aux.rcpt_qty_is_full_qty,'N'),
+        custproductgroup.rcpt_qty_is_full_qty)
+,decode(nvl(custproductgroup.use_entered_weight_yn,'C'),
+   'C', nvl(customer_aux.use_entered_weight_yn,'N'),
+        custproductgroup.use_entered_weight_yn)
+,decode(nvl(custproductgroup.restrict_lot_sub,'C'),'C',nvl(customer_aux.restrict_lot_sub,'N'),custproductgroup.restrict_lot_sub)
+,decode(nvl(custproductgroup.rec_qty_remains,'C'),'C',nvl(customer_aux.rec_qty_remains,'N'),custproductgroup.rec_qty_remains)
+from customer, custproductgroup, customer_aux
+where custproductgroup.custid = customer.custid
+  and customer.custid = customer_aux.custid (+)
+union
+select
+customer.custid
+,name
+,null
+,null
+,null
+,customer.rategroup
+,substr(zrt.rategroup_abbrev(customer.custid,customer.rategroup),1,12)
+,nvl(customer.lotrequired,'N')
+,nvl(customer.lotrftag,'LOT')
+,nvl(customer.serialrequired,'N')
+,nvl(customer.serialrftag,'SN')
+,nvl(customer.user1required,'N')
+,nvl(customer.user1rftag,'UITM1')
+,nvl(customer.user2required,'N')
+,nvl(customer.user2rftag,'UITM2')
+,nvl(customer.user3required,'N')
+,nvl(customer.user3rftag,'UITM3')
+,nvl(customer.mfgdaterequired,'N')
+,nvl(customer.expdaterequired,'N')
+,nvl(customer.nodamaged,'N')
+,nvl(customer.countryrequired,'N')
+,nvl(customer.backorder,'N')
+,nvl(customer.allowsub,'N')
+,nvl(customer.invstatusind,'I')
+,customer.invstatus
+,nvl(customer.invclassind,'I')
+,customer.inventoryclass
+,nvl(customer.qtytype,'E')
+,nvl(customer.variancepct,0)
+,nvl(customer.variancepct_overage,0)
+,nvl(customer.subslprsnrequired,'N')
+,customer.fifowindowdays
+,nvl(customer.maxqtyof1,'N')
+,customer.lotfmtruleid
+,nvl(customer.lotfmtaction,'W')
+,customer.serialfmtruleid
+,nvl(customer.serialfmtaction,'W')
+,customer.user1fmtruleid
+,nvl(customer.user1fmtaction,'W')
+,customer.user2fmtruleid
+,nvl(customer.user2fmtaction,'W')
+,customer.user3fmtruleid
+,nvl(customer.user3fmtaction,'W')
+,nvl(customer.ordercheckrequired,'N')
+,nvl(customer.weightcheckrequired,'N')
+,nvl(customer.putawayconfirmation,'1')
+,customer.status
+,customer.parseruleid
+,customer.parseentryfield
+,nvl(customer.parseruleaction,'N')
+,customer.returnsdisposition
+,30
+,60
+,90
+,nvl(customer.serialasncapture,'N')
+,nvl(customer.user1asncapture,'N')
+,nvl(customer.user2asncapture,'N')
+,nvl(customer.user3asncapture,'N')
+,nvl(customer.use_catch_weights,'N')
+,customer.catch_weight_out_cap_type
+,nvl(customer.require_cyclecount_item,'Y')
+,use_fifo
+,prtlps_on_load_arrival
+,prtlps_profid
+,prtlps_def_handling
+,prtlps_putaway_dir
+,nvl(customer.putaway_highest_whole_uom_yn,'N')
+,'N'
+,1
+,'N'
+,1
+,customer_aux.min0qtysuspenseweight
+,system_generated_lps
+,nvl(customer_aux.capture_pickuom,'N')
+,nvl(customer_aux.locstatuschg_loctype,'n/a')
+,customer_aux.locstatuschg_entry_invstatus
+,customer_aux.locstatuschg_entry_adjreason
+,customer_aux.locstatuschg_exit_invstatus
+,customer_aux.locstatuschg_exit_adjreason
+,customer_aux.locstatuschg_exclude_tasktypes
+,nvl(customer_aux.require_phyinv_item,'Y')
+,nvl(customer_aux.track_picked_pf_lps,'N')
+,nvl(customer_aux.require_cyclecount_lot,'Y')
+,nvl(customer_aux.require_phyinv_lot,'Y')
+,nvl(customer_aux.rcpt_qty_is_full_qty,'N')
+,nvl(customer_aux.use_entered_weight_yn,'N')
+,nvl(customer_aux.restrict_lot_sub,'N')
+,nvl(customer_aux.rec_qty_remains,'N')
+from customer, customer_aux
+where customer.custid = customer_aux.custid (+);
+
+comment on table custproductgroupview is '$Id$';
+
+create or replace view custitemview
+(custid
+,custname
+,item
+,DESCR
+,ABBREV
+,STATUS
+,RATEGROUP
+,BASEUOM
+,DISPLAYUOM
+,LASTUSER
+,LASTUPDATE
+,SHELFLIFE
+,MIN_SALE_LIFE
+,STACKHEIGHT
+,COUNTRYOF
+,EXPIRYACTION
+,VELOCITY
+,LOTREQUIRED
+,LOTRFTAG
+,SERIALREQUIRED
+,SERIALRFTAG
+,USER1REQUIRED
+,USER1RFTAG
+,USER2REQUIRED
+,USER2RFTAG
+,USER3REQUIRED
+,USER3RFTAG
+,MFGDATEREQUIRED
+,EXPDATEREQUIRED
+,NODAMAGED
+,COUNTRYREQUIRED
+,WEIGHT
+,CUBE
+,USERAMT1
+,USERAMT2
+,statusabbrev
+,baseuomabbrev
+,hazardous
+,rategroupabbrev
+,realitem
+,backorder
+,allowsub
+,qtytype
+,invstatusind
+,invstatus
+,invclassind
+,inventoryclass
+,variancepct
+,variancepct_overage
+,subslprsnrequired
+,iskit
+,lottrackinggeneration
+,fifowindowdays
+,productgroup
+,cartontype
+,picktotype
+,lastcount
+,maxqtyof1
+,cyclecountinterval
+,labeluom
+,LOTFMTRULEID
+,LOTFMTACTION
+,SERIALFMTRULEID
+,SERIALFMTACTION
+,USER1FMTRULEID
+,USER1FMTACTION
+,USER2FMTRULEID
+,USER2FMTACTION
+,USER3FMTRULEID
+,USER3FMTACTION
+,LOTSUMBOL
+,LOTSUMRECEIPT
+,LOTSUMRENEWAL
+,LOTSUMACCESS
+,LTLFC
+,NMFC
+,ORDERCHECKREQUIRED
+,PRIMARYCHEMCODE
+,PRIMARYHAZARDCLASS
+,RECVINVSTATUS
+,SECONDARYCHEMCODE
+,SECONDARYHAZARDCLASS
+,STACKHEIGHTUOM
+,TAREWEIGHT
+,TERTIARYCHEMCODE
+,weightcheckrequired
+,putawayconfirmation
+,quaternaryCHEMCODE
+,parseruleid
+,parseentryfield
+,parseruleaction
+,returnsdisposition
+,critlevel1
+,critlevel2
+,critlevel3
+,serialasncapture
+,user1asncapture
+,user2asncapture
+,user3asncapture
+,imoprimarychemcode
+,imosecondarychemcode
+,imotertiarychemcode
+,imoquaternarychemcode
+,iataprimarychemcode
+,iatasecondarychemcode
+,iatatertiarychemcode
+,iataquaternarychemcode
+,length
+,width
+,height
+,reorderqty
+,needs_review_yn
+,use_catch_weights
+,catch_weight_out_cap_type
+,require_cyclecount_item
+,prtlps_on_load_arrival
+,prtlps_profid
+,prtlps_def_handling
+,prtlps_putaway_dir
+,putaway_highest_whole_uom_yn
+,use_min_units_qty
+,min_units_qty
+,use_multiple_units_qty
+,multiple_units_qty
+,unkitted_class
+,min0qtysuspenseweight
+,system_generated_lps
+,catch_weight_in_cap_type
+,allow_lineitem_weights
+,capture_pickuom
+,require_phyinv_item
+,track_picked_pf_lps
+,lot_seq_name
+,useritem1_seq_name
+,useritem2_seq_name
+,useritem3_seq_name
+,serial_seq_name
+,locstatuschg_loctype
+,locstatuschg_entry_invstatus
+,locstatuschg_entry_adjreason
+,locstatuschg_exit_invstatus
+,locstatuschg_exit_adjreason
+,locstatuschg_exclude_tasktypes
+,allocrule
+,profid
+,require_cyclecount_lot
+,require_phyinv_lot
+,catch_weight_item_weight_yn
+,bulkcount_expdaterequired
+,bulkcount_mfgdaterequired
+,nomixeditemlp
+,disallowoverbuiltlp
+,warnshortlp
+,warnshortlpqty
+,pick_front_by_invclass
+,crush_factor
+,auditignorelot
+,pct_sale_billing
+,min_pct_im_value
+,orderdtl_dollar_amt_pt
+,entrydate
+,rcpt_qty_is_full_qty
+,rf_clear_item
+,require_orderdtl_text_yn
+,imported_orderdtl_text_col
+,updated_orderdtl_text_col
+,use_entered_weight_yn
+,restrict_lot_sub
+,rec_qty_remains
+)
+as
+select
+c.custid
+,c.name
+,i.item
+,i.DESCR
+,i.ABBREV
+,i.STATUS
+,decode(nvl(i.rategroup,'C'),'C',
+ decode(nvl(g.rategroup,'C'),'C',c.rategroup,g.rategroup),i.rategroup)
+,i.BASEUOM
+,i.DISPLAYUOM
+,i.LASTUSER
+,i.LASTUPDATE
+,nvl(i.SHELFLIFE,0)
+,nvl(i.MIN_SALE_LIFE,0)
+,nvl(i.STACKHEIGHT,0)
+,i.COUNTRYOF
+,i.EXPIRYACTION
+,i.VELOCITY
+,decode(nvl(i.lotrequired,'C'),'C',
+ decode(nvl(g.lotrequired,'C'),'C',nvl(c.lotrequired,'N'),g.lotrequired),i.lotrequired)
+,nvl(i.LOTRFTAG,nvl(g.lotrftag,nvl(c.lotrftag,'LOT')))
+,decode(nvl(i.serialrequired,'C'),'C',
+ decode(nvl(g.serialrequired,'C'),'C',nvl(c.serialrequired,'N'),g.serialrequired),i.serialrequired)
+,nvl(i.SERIALRFTAG,nvl(g.serialrftag,nvl(c.serialrftag,'SN')))
+,decode(nvl(i.user1required,'C'),'C',
+ decode(nvl(g.user1required,'C'),'C',nvl(c.user1required,'N'),g.user1required),i.user1required)
+,nvl(i.USER1RFTAG,nvl(g.user1rftag,nvl(c.user1rftag,'UITM1')))
+,decode(nvl(i.user2required,'C'),'C',
+ decode(nvl(g.user2required,'C'),'C',nvl(c.user2required,'N'),g.user2required),i.user2required)
+,nvl(i.USER2RFTAG,nvl(g.user2rftag,nvl(c.user2rftag,'UITM2')))
+,decode(nvl(i.user3required,'C'),'C',
+ decode(nvl(g.user3required,'C'),'C',nvl(c.user3required,'N'),g.user3required),i.user3required)
+,nvl(i.user3RFTAG,nvl(g.user3rftag,nvl(c.user3rftag,'UITM3')))
+,decode(nvl(i.mfgdaterequired,'C'),'C',
+ decode(nvl(g.mfgdaterequired,'C'),'C',nvl(c.mfgdaterequired,'N'),g.mfgdaterequired),i.mfgdaterequired)
+,decode(nvl(i.expdaterequired,'C'),'C',
+ decode(nvl(g.expdaterequired,'C'),'C',nvl(c.expdaterequired,'N'),g.expdaterequired),i.expdaterequired)
+,decode(nvl(i.nodamaged,'C'),'C',
+ decode(nvl(g.nodamaged,'C'),'C',nvl(c.nodamaged,'N'),g.nodamaged),i.nodamaged)
+,decode(nvl(i.countryrequired,'C'),'C',
+ decode(nvl(g.countryrequired,'C'),'C',nvl(c.countryrequired,'N'),g.countryrequired),i.countryrequired)
+,nvl(i.WEIGHT,0)
+,nvl(i.CUBE,0)
+,nvl(i.USERAMT1,0)
+,nvl(i.USERAMT2,0)
+,nvl(s.abbrev,i.status)
+,nvl(u.abbrev,i.baseuom)
+,nvl(i.hazardous,'N')
+,substr(zrt.rategroup_abbrev(i.custid,decode(nvl(i.RATEGROUP,'C'),'C',
+  decode(nvl(g.rategroup,'C'),'C',c.rategroup,g.rategroup),i.rategroup)),1,12)
+,i.item
+,decode(nvl(i.backorder,'C'),'C',
+ decode(nvl(g.backorder,'C'),'C',nvl(c.backorder,'N'),g.backorder),i.backorder)
+,decode(nvl(i.allowsub,'C'),'C',
+ decode(nvl(g.allowsub,'C'),'C',nvl(c.allowsub,'N'),g.allowsub),i.allowsub)
+,decode(nvl(i.qtytype,'C'),'C',
+ decode(nvl(g.qtytype,'C'),'C',nvl(c.qtytype,'E'),g.qtytype),i.qtytype)
+,decode(nvl(i.invstatusind,'C'),'C',
+ decode(nvl(g.invstatusind,'C'),'C',nvl(c.invstatusind,'I'),g.invstatusind),i.invstatusind)
+,decode(nvl(i.invstatusind,'C'),'C',
+ decode(nvl(g.invstatus,'C'),'C',c.invstatus,g.invstatus),i.invstatus)
+,decode(nvl(i.invclassind,'C'),'C',
+ decode(nvl(g.invclassind,'C'),'C',nvl(c.invclassind,'I'),g.invclassind),i.invclassind)
+,decode(nvl(i.invclassind,'C'),'C',
+ decode(nvl(g.inventoryclass,'C'),'C',c.inventoryclass,g.inventoryclass),i.inventoryclass)
+,decode(nvl(i.variancepct_use_default,'Y'),'N',nvl(i.variancepct,0),
+        decode(nvl(g.variancepct_use_default,'Y'),'N',nvl(g.variancepct,0),nvl(c.variancepct,0)))
+,decode(nvl(i.variancepct_use_default,'Y'),'N',nvl(i.variancepct_overage,0),
+        decode(nvl(g.variancepct_use_default,'Y'),'N',nvl(g.variancepct_overage,0),nvl(c.variancepct_overage,0)))
+,decode(nvl(i.subslprsnrequired,'C'),'C',
+ decode(nvl(g.subslprsnrequired,'C'),'C',nvl(c.subslprsnrequired,'N'),g.subslprsnrequired),
+ i.subslprsnrequired)
+,nvl(i.iskit,'N')
+,lottrackinggeneration
+,decode(i.use_fifo,
+ 'C',decode(nvl(g.use_fifo,'C'),'C',c.fifowindowdays,g.fifowindowdays),
+ 'Y',i.fifowindowdays,
+ null)
+,i.productgroup
+,cartontype
+,picktotype
+,lastcount
+,decode(nvl(i.maxqtyof1,'C'),'C',
+ decode(nvl(g.maxqtyof1,'C'),'C',nvl(c.maxqtyof1,'N')),i.maxqtyof1)
+,nvl(i.cyclecountinterval,0)
+,i.labeluom
+,nvl(i.lotfmtruleid,nvl(g.lotfmtruleid,c.lotfmtruleid))
+,decode(nvl(i.lotfmtaction,'C'),'C',
+ decode(nvl(g.lotfmtaction,'C'),'C',nvl(c.lotfmtaction,'W'),g.lotfmtaction),
+ i.lotfmtaction)
+,nvl(i.serialfmtruleid,nvl(g.serialfmtruleid,c.serialfmtruleid))
+,decode(nvl(i.serialfmtaction,'C'),'C',
+ decode(nvl(g.serialfmtaction,'C'),'C',nvl(c.serialfmtaction,'W'),g.serialfmtaction),
+ i.serialfmtaction)
+,nvl(i.user1fmtruleid,nvl(g.user1fmtruleid,c.user1fmtruleid))
+,decode(nvl(i.user1fmtaction,'C'),'C',
+ decode(nvl(g.user1fmtaction,'C'),'C',nvl(c.user1fmtaction,'W'),g.user1fmtaction),
+ i.user1fmtaction)
+,nvl(i.user2fmtruleid,nvl(g.user2fmtruleid,c.user2fmtruleid))
+,decode(nvl(i.user2fmtaction,'C'),'C',
+ decode(nvl(g.user2fmtaction,'C'),'C',nvl(c.user2fmtaction,'W'),g.user2fmtaction),
+ i.user2fmtaction)
+,nvl(i.user3fmtruleid,nvl(g.user3fmtruleid,c.user3fmtruleid))
+,decode(nvl(i.user3fmtaction,'C'),'C',
+ decode(nvl(g.user3fmtaction,'C'),'C',nvl(c.user3fmtaction,'W'),g.user3fmtaction),
+ i.user3fmtaction)
+,nvl(i.LOTSUMBOL,'N')
+,nvl(i.LOTSUMRECEIPT,'N')
+,nvl(i.LOTSUMRENEWAL,'N')
+,nvl(i.LOTSUMACCESS,'N')
+,i.LTLFC
+,i.NMFC
+,decode(nvl(i.ordercheckrequired,'C'),'C',
+ decode(nvl(g.ordercheckrequired,'C'),'C',nvl(c.ordercheckrequired,'N'),
+ g.ordercheckrequired),i.ordercheckrequired)
+,i.PRIMARYCHEMCODE
+,i.PRIMARYHAZARDCLASS
+,i.RECVINVSTATUS
+,i.SECONDARYCHEMCODE
+,i.SECONDARYHAZARDCLASS
+,i.STACKHEIGHTUOM
+,i.TAREWEIGHT
+,i.TERTIARYCHEMCODE
+,decode(nvl(i.weightcheckrequired,'C'),'C',
+ decode(nvl(g.weightcheckrequired,'C'),'C',nvl(c.weightcheckrequired,'N'),
+ g.weightcheckrequired),i.weightcheckrequired)
+,decode(nvl(i.putawayconfirmation,'C'),'C',
+ decode(nvl(g.putawayconfirmation,'C'),'C',nvl(c.putawayconfirmation,'1'),
+ g.putawayconfirmation),i.putawayconfirmation)
+,i.quaternARYCHEMCODE
+,nvl(i.parseruleid,nvl(g.parseruleid,c.parseruleid))
+,nvl(i.parseentryfield,nvl(g.parseentryfield,c.parseentryfield))
+,decode(nvl(i.parseruleaction,'C'),'C',
+ decode(nvl(g.parseruleaction,'C'),'C',nvl(c.parseruleaction,'N'),
+ g.parseruleaction),i.parseruleaction)
+,nvl(i.returnsdisposition,nvl(g.returnsdisposition, c.returnsdisposition))
+,nvl(i.critlevel1,nvl(g.critlevel1,30))
+,nvl(i.critlevel2,nvl(g.critlevel2,60))
+,nvl(i.critlevel3,nvl(g.critlevel3,90))
+,decode(nvl(i.serialasncapture,'C'),'C',
+ decode(nvl(g.serialasncapture,'C'),'C',nvl(c.serialasncapture,'N'),
+ g.serialasncapture),i.serialasncapture)
+,decode(nvl(i.user1asncapture,'C'),'C',
+ decode(nvl(g.user1asncapture,'C'),'C',nvl(c.user1asncapture,'N'),
+ g.user1asncapture),i.user1asncapture)
+,decode(nvl(i.user2asncapture,'C'),'C',
+ decode(nvl(g.user2asncapture,'C'),'C',nvl(c.user2asncapture,'N'),
+ g.user2asncapture),i.user2asncapture)
+,decode(nvl(i.user3asncapture,'C'),'C',
+ decode(nvl(g.user3asncapture,'C'),'C',nvl(c.user3asncapture,'N'),
+ g.user3asncapture),i.user3asncapture)
+,imoprimarychemcode
+,imosecondarychemcode
+,imotertiarychemcode
+,imoquaternarychemcode
+,iataprimarychemcode
+,iatasecondarychemcode
+,iatatertiarychemcode
+,iataquaternarychemcode
+,nvl(i.length,0)
+,nvl(i.width,0)
+,nvl(i.height,0)
+,i.reorderqty
+,nvl(i.needs_review_yn,'N')
+,decode(nvl(i.use_catch_weights,'C'),'C',
+ decode(nvl(g.use_catch_weights,'C'),'C',nvl(c.use_catch_weights,'N'),
+ g.use_catch_weights),i.use_catch_weights)
+,nvl(i.catch_weight_out_cap_type,nvl(g.catch_weight_out_cap_type,c.catch_weight_out_cap_type))
+,decode(nvl(i.require_cyclecount_item,'C'),'C',
+ decode(nvl(g.require_cyclecount_item,'C'),'C',nvl(c.require_cyclecount_item,'Y'),
+ g.require_cyclecount_item),i.require_cyclecount_item)
+,decode(nvl(i.prtlps_on_load_arrival,'C'),
+  'C', nvl(c.prtlps_on_load_arrival,'N'),
+       i.prtlps_on_load_arrival)
+,decode(nvl(i.prtlps_on_load_arrival,'C'),
+  'C', c.prtlps_profid,
+       i.prtlps_profid)
+,decode(nvl(i.prtlps_on_load_arrival,'C'),
+  'C', c.prtlps_def_handling,
+       i.prtlps_def_handling)
+,decode(nvl(i.prtlps_on_load_arrival,'C'),
+  'C', c.prtlps_putaway_dir,
+       i.prtlps_putaway_dir)
+,decode(nvl(i.putaway_highest_whole_uom_yn,'C'),
+   'C', decode(nvl(g.putaway_highest_whole_uom_yn,'C'),
+        'C',nvl(c.putaway_highest_whole_uom_yn,'N'),
+            g.putaway_highest_whole_uom_yn),
+        i.putaway_highest_whole_uom_yn)
+,decode(nvl(i.use_min_units_qty,'C'),'C',
+        nvl(g.use_min_units_qty,'N'),i.use_min_units_qty)
+,decode(nvl(i.min_units_qty,0),0,
+        nvl(g.min_units_qty,1),i.min_units_qty)
+,decode(nvl(i.use_multiple_units_qty,'C'),'C',
+        nvl(g.use_multiple_units_qty,'N'),i.use_multiple_units_qty)
+,decode(nvl(i.multiple_units_qty,0),0,
+        nvl(g.multiple_units_qty,1),i.multiple_units_qty)
+,i.unkitted_class
+,nvl(i.min0qtysuspenseweight, nvl(g.min0qtysuspenseweight, ca.min0qtysuspenseweight))
+,decode(nvl(i.system_generated_lps,'C'),
+  'C', nvl(ca.system_generated_lps,'N'),
+       i.system_generated_lps)
+,i.catch_weight_in_cap_type
+,ca.allow_lineitem_weights
+,decode(nvl(i.capture_pickuom,'C'),
+   'C', decode(nvl(g.capture_pickuom,'C'),
+        'C',nvl(ca.capture_pickuom,'N'),
+            g.capture_pickuom),
+        i.capture_pickuom)
+,decode(nvl(i.require_phyinv_item,'C'),'C',
+ decode(nvl(g.require_phyinv_item,'C'),'C',nvl(ca.require_phyinv_item,'Y'),
+ g.require_phyinv_item),i.require_phyinv_item)
+,decode(nvl(i.track_picked_pf_lps,'C'),
+   'C', decode(nvl(g.track_picked_pf_lps,'C'),
+        'C',nvl(ca.track_picked_pf_lps,'N'),
+            g.track_picked_pf_lps),
+        i.track_picked_pf_lps)
+,decode(nvl(i.lot_seq_name,'C'),
+   'C', decode(nvl(g.lot_seq_name,'C'),
+        'C',ca.lot_seq_name,
+            g.lot_seq_name),
+        i.lot_seq_name)
+,decode(nvl(i.useritem1_seq_name,'C'),
+   'C', decode(nvl(g.useritem1_seq_name,'C'),
+        'C',ca.useritem1_seq_name,
+            g.useritem1_seq_name),
+        i.useritem1_seq_name)
+,decode(nvl(i.useritem2_seq_name,'C'),
+   'C', decode(nvl(g.useritem2_seq_name,'C'),
+        'C',ca.useritem2_seq_name,
+            g.useritem2_seq_name),
+        i.useritem2_seq_name)
+,decode(nvl(i.useritem3_seq_name,'C'),
+   'C', decode(nvl(g.useritem3_seq_name,'C'),
+        'C',ca.useritem3_seq_name,
+            g.useritem3_seq_name),
+        i.useritem3_seq_name)
+,decode(nvl(i.serial_seq_name,'C'),
+   'C', decode(nvl(g.serial_seq_name,'C'),
+        'C',ca.serial_seq_name,
+            g.serial_seq_name),
+        i.serial_seq_name)
+,decode(nvl(i.locstatuschg_loctype,'C'),
+   'C', decode(nvl(g.locstatuschg_loctype,'C'),
+        'C',nvl(ca.locstatuschg_loctype,'n/a'),
+            g.locstatuschg_loctype),
+        i.locstatuschg_loctype)
+,decode(nvl(i.locstatuschg_entry_invstatus,'C'),
+   'C', decode(nvl(g.locstatuschg_entry_invstatus,'C'),
+        'C',ca.locstatuschg_entry_invstatus,
+            g.locstatuschg_entry_invstatus),
+        i.locstatuschg_entry_invstatus)
+,decode(nvl(i.locstatuschg_entry_adjreason,'C'),
+   'C', decode(nvl(g.locstatuschg_entry_adjreason,'C'),
+        'C',ca.locstatuschg_entry_adjreason,
+            g.locstatuschg_entry_adjreason),
+        i.locstatuschg_entry_adjreason)
+,decode(nvl(i.locstatuschg_exit_invstatus,'C'),
+   'C', decode(nvl(g.locstatuschg_exit_invstatus,'C'),
+        'C',ca.locstatuschg_exit_invstatus,
+            g.locstatuschg_exit_invstatus),
+        i.locstatuschg_exit_invstatus)
+,decode(nvl(i.locstatuschg_exit_adjreason,'C'),
+   'C', decode(nvl(g.locstatuschg_exit_adjreason,'C'),
+        'C',ca.locstatuschg_exit_adjreason,
+            g.locstatuschg_exit_adjreason),
+        i.locstatuschg_exit_adjreason)
+,decode(nvl(i.locstatuschg_exclude_tasktypes,'C'),
+   'C', decode(nvl(g.locstatuschg_exclude_tasktypes,'C'),
+        'C',ca.locstatuschg_exclude_tasktypes,
+            g.locstatuschg_exclude_tasktypes),
+        i.locstatuschg_exclude_tasktypes)
+,i.allocrule
+,i.profid
+,decode(nvl(i.require_cyclecount_lot,'C'),'C',
+ decode(nvl(g.require_cyclecount_lot,'C'),'C',nvl(ca.require_cyclecount_lot,'Y'),
+ g.require_cyclecount_lot),i.require_cyclecount_lot)
+,decode(nvl(i.require_phyinv_lot,'C'),'C',
+ decode(nvl(g.require_phyinv_lot,'C'),'C',nvl(ca.require_phyinv_lot,'Y'),
+ g.require_phyinv_lot),i.require_phyinv_lot)
+,ca.catch_weight_item_weight_yn
+,nvl(i.bulkcount_expdaterequired,'N')
+,nvl(i.bulkcount_mfgdaterequired,'N')
+,nvl(i.nomixeditemlp,'N')
+,nvl(i.disallowoverbuiltlp,'N')
+,nvl(i.warnshortlp,'N')
+,nvl(i.warnshortlpqty,0)
+,nvl(i.pick_front_by_invclass,'N')
+,nvl(i.crush_factor,0)
+,nvl(ca.auditignorelot, 'N')
+,nvl(c.pct_sale_billing,'N')
+,c.min_pct_im_value
+,c.orderdtl_dollar_amt_pt
+,i.entrydate
+,decode(nvl(i.rcpt_qty_is_full_qty,'C'),
+   'C', decode(nvl(g.rcpt_qty_is_full_qty,'C'),
+        'C',nvl(ca.rcpt_qty_is_full_qty,'N'),
+            g.rcpt_qty_is_full_qty),
+        i.rcpt_qty_is_full_qty)
+,ca.rf_clear_item
+,nvl(ca.require_orderdtl_text_yn, 'N')
+,ca.imported_orderdtl_text_col
+,ca.updated_orderdtl_text_col
+,decode(nvl(i.use_entered_weight_yn,'C'),'C',
+ decode(nvl(g.use_entered_weight_yn,'C'),'C',nvl(ca.use_entered_weight_yn,'N'),g.use_entered_weight_yn),
+ i.use_entered_weight_yn)
+,decode(nvl(i.restrict_lot_sub,'C'),'C',
+ decode(nvl(g.restrict_lot_sub,'C'),'C',nvl(ca.restrict_lot_sub,'N'),g.restrict_lot_sub),i.restrict_lot_sub)
+,decode(nvl(i.rec_qty_remains,'C'),'C',
+ decode(nvl(g.rec_qty_remains,'C'),'C',nvl(ca.rec_qty_remains,'Y'),
+ g.rec_qty_remains),i.rec_qty_remains)
+from itemstatus s, unitsofmeasure u,
+     customer c, custproductgroup g, custitem i, customer_aux ca
+where i.custid = c.custid
+  and i.custid = g.custid(+)
+  and i.productgroup = g.productgroup(+)
+  and i.baseuom = u.code(+)
+  and i.status = s.code(+)
+  and c.custid = ca.custid(+);
+
+comment on table custitemview is '$Id$';
+
+create or replace view custaliasview
+(custid
+,custname
+,item
+,DESCR
+,ABBREV
+,STATUS
+,RATEGROUP
+,BASEUOM
+,DISPLAYUOM
+,LASTUSER
+,LASTUPDATE
+,SHELFLIFE
+,MIN_SALE_LIFE
+,STACKHEIGHT
+,COUNTRYOF
+,EXPIRYACTION
+,VELOCITY
+,LOTREQUIRED
+,LOTRFTAG
+,SERIALREQUIRED
+,SERIALRFTAG
+,USER1REQUIRED
+,USER1RFTAG
+,USER2REQUIRED
+,USER2RFTAG
+,USER3REQUIRED
+,USER3RFTAG
+,MFGDATEREQUIRED
+,EXPDATEREQUIRED
+,NODAMAGED
+,COUNTRYREQUIRED
+,WEIGHT
+,CUBE
+,USERAMT1
+,USERAMT2
+,statusabbrev
+,baseuomabbrev
+,hazardous
+,rategroupabbrev
+,realitem
+,backorder
+,allowsub
+,qtytype
+,invstatusind
+,invstatus
+,invclassind
+,inventoryclass
+,variancepct
+,variancepct_overage
+,subslprsnrequired
+,iskit
+,lottrackinggeneration
+,lastcount
+,maxqtyof1
+,cyclecountinterval
+,labeluom
+,LOTFMTRULEID
+,LOTFMTACTION
+,SERIALFMTRULEID
+,SERIALFMTACTION
+,USER1FMTRULEID
+,USER1FMTACTION
+,USER2FMTRULEID
+,USER2FMTACTION
+,USER3FMTRULEID
+,USER3FMTACTION
+,LOTSUMBOL
+,LOTSUMRECEIPT
+,LOTSUMRENEWAL
+,LOTSUMACCESS
+,LTLFC
+,NMFC
+,ORDERCHECKREQUIRED
+,PRIMARYCHEMCODE
+,PRIMARYHAZARDCLASS
+,RECVINVSTATUS
+,SECONDARYCHEMCODE
+,SECONDARYHAZARDCLASS
+,PUTAWAYCONFIRMATION
+,STACKHEIGHTUOM
+,TAREWEIGHT
+,TERTIARYCHEMCODE
+,productgroup
+,quaternARYCHEMCODE
+,parseruleid
+,parseentryfield
+,parseruleaction
+,returnsdisposition
+,critlevel1
+,critlevel2
+,critlevel3
+,serialasncapture
+,user1asncapture
+,user2asncapture
+,user3asncapture
+,imoprimarychemcode
+,imosecondarychemcode
+,imotertiarychemcode
+,imoquaternarychemcode
+,iataprimarychemcode
+,iatasecondarychemcode
+,iatatertiarychemcode
+,iataquaternarychemcode
+,length
+,width
+,height
+,reorderqty
+,needs_review_yn
+,use_catch_weights
+,catch_weight_out_cap_type
+,require_cyclecount_item
+,use_min_units_qty
+,min_units_qty
+,use_multiple_units_qty
+,multiple_units_qty
+,require_phyinv_item
+,require_cyclecount_lot
+,require_phyinv_lot
+,bulkcount_expdaterequired
+,bulkcount_mfgdaterequired
+,entrydate
+,restrict_lot_sub
+)
+as
+select
+custitemalias.custid
+,custitemview.custname
+,custitemalias.itemalias
+,custitemview.DESCR
+,custitemview.ABBREV
+,custitemview.STATUS
+,custitemview.RATEGROUP
+,custitemview.BASEUOM
+,custitemview.DISPLAYUOM
+,custitemview.LASTUSER
+,custitemview.LASTUPDATE
+,custitemview.SHELFLIFE
+,custitemview.MIN_SALE_LIFE
+,custitemview.STACKHEIGHT
+,custitemview.COUNTRYOF
+,custitemview.EXPIRYACTION
+,custitemview.VELOCITY
+,custitemview.LOTREQUIRED
+,custitemview.LOTRFTAG
+,custitemview.SERIALREQUIRED
+,custitemview.SERIALRFTAG
+,custitemview.USER1REQUIRED
+,custitemview.USER1RFTAG
+,custitemview.USER2REQUIRED
+,custitemview.USER2RFTAG
+,custitemview.USER3REQUIRED
+,custitemview.USER3RFTAG
+,custitemview.MFGDATEREQUIRED
+,custitemview.EXPDATEREQUIRED
+,custitemview.NODAMAGED
+,custitemview.COUNTRYREQUIRED
+,custitemview.WEIGHT
+,custitemview.CUBE
+,custitemview.USERAMT1
+,custitemview.USERAMT2
+,custitemview.statusabbrev
+,custitemview.baseuomabbrev
+,custitemview.hazardous
+,custitemview.rategroupabbrev
+,custitemalias.item
+,custitemview.backorder
+,custitemview.allowsub
+,custitemview.qtytype
+,custitemview.invstatusind
+,custitemview.invstatus
+,custitemview.invclassind
+,custitemview.inventoryclass
+,custitemview.variancepct
+,custitemview.variancepct_overage
+,custitemview.subslprsnrequired
+,custitemview.iskit
+,custitemview.lottrackinggeneration
+,custitemview.lastcount
+,custitemview.maxqtyof1
+,custitemview.cyclecountinterval
+,custitemview.labeluom
+,custitemview.LOTFMTRULEID
+,custitemview.LOTFMTACTION
+,custitemview.SERIALFMTRULEID
+,custitemview.SERIALFMTACTION
+,custitemview.USER1FMTRULEID
+,custitemview.USER1FMTACTION
+,custitemview.USER2FMTRULEID
+,custitemview.USER2FMTACTION
+,custitemview.USER3FMTRULEID
+,custitemview.USER3FMTACTION
+,custitemview.LOTSUMBOL
+,custitemview.LOTSUMRECEIPT
+,custitemview.LOTSUMRENEWAL
+,custitemview.LOTSUMACCESS
+,custitemview.LTLFC
+,custitemview.NMFC
+,custitemview.ORDERCHECKREQUIRED
+,custitemview.PRIMARYCHEMCODE
+,custitemview.PRIMARYHAZARDCLASS
+,custitemview.RECVINVSTATUS
+,custitemview.SECONDARYCHEMCODE
+,custitemview.SECONDARYHAZARDCLASS
+,custitemview.PUTAWAYCONFIRMATION
+,custitemview.STACKHEIGHTUOM
+,custitemview.TAREWEIGHT
+,custitemview.TERTIARYCHEMCODE
+,custitemview.productgroup
+,custitemview.quaternARYCHEMCODE
+,custitemview.parseruleid
+,custitemview.parseentryfield
+,custitemview.parseruleaction
+,custitemview.returnsdisposition
+,custitemview.critlevel1
+,custitemview.critlevel2
+,custitemview.critlevel3
+,custitemview.serialasncapture
+,custitemview.user1asncapture
+,custitemview.user2asncapture
+,custitemview.user3asncapture
+,custitemview.imoprimarychemcode
+,custitemview.imosecondarychemcode
+,custitemview.imotertiarychemcode
+,custitemview.imoquaternarychemcode
+,custitemview.iataprimarychemcode
+,custitemview.iatasecondarychemcode
+,custitemview.iatatertiarychemcode
+,custitemview.iataquaternarychemcode
+,custitemview.length
+,custitemview.width
+,custitemview.height
+,custitemview.reorderqty
+,custitemview.needs_review_yn
+,custitemview.use_catch_weights
+,custitemview.catch_weight_out_cap_type
+,custitemview.require_cyclecount_item
+,custitemview.use_min_units_qty
+,custitemview.min_units_qty
+,custitemview.use_multiple_units_qty
+,custitemview.multiple_units_qty
+,custitemview.require_phyinv_item
+,custitemview.require_cyclecount_lot
+,custitemview.require_phyinv_lot
+,custitemview.bulkcount_expdaterequired
+,custitemview.bulkcount_mfgdaterequired
+,custitemview.entrydate
+,custitemview.restrict_lot_sub
+from custitemview, custitemalias
+where custitemalias.custid = custitemview.custid(+)
+  and custitemalias.item = custitemview.item(+);
+
+comment on table custaliasview is '$Id$';
+
+create or replace view allitemview
+(custid
+,custname
+,item
+,DESCR
+,ABBREV
+,STATUS
+,RATEGROUP
+,BASEUOM
+,DISPLAYUOM
+,LASTUSER
+,LASTUPDATE
+,SHELFLIFE
+,MIN_SALE_LIFE
+,STACKHEIGHT
+,COUNTRYOF
+,EXPIRYACTION
+,VELOCITY
+,LOTREQUIRED
+,LOTRFTAG
+,SERIALREQUIRED
+,SERIALRFTAG
+,USER1REQUIRED
+,USER1RFTAG
+,USER2REQUIRED
+,USER2RFTAG
+,USER3REQUIRED
+,USER3RFTAG
+,MFGDATEREQUIRED
+,EXPDATEREQUIRED
+,NODAMAGED
+,COUNTRYREQUIRED
+,WEIGHT
+,CUBE
+,USERAMT1
+,USERAMT2
+,statusabbrev
+,baseuomabbrev
+,hazardous
+,rategroupabbrev
+,realitem
+,backorder
+,allowsub
+,qtytype
+,invstatusind
+,invstatus
+,invclassind
+,inventoryclass
+,variancepct
+,variancepct_overage
+,subslprsnrequired
+,iskit
+,lottrackinggeneration
+,lastcount
+,maxqtyof1
+,cyclecountinterval
+,labeluom
+,LOTFMTRULEID
+,LOTFMTACTION
+,SERIALFMTRULEID
+,SERIALFMTACTION
+,USER1FMTRULEID
+,USER1FMTACTION
+,USER2FMTRULEID
+,USER2FMTACTION
+,USER3FMTRULEID
+,USER3FMTACTION
+,LOTSUMBOL
+,LOTSUMRECEIPT
+,LOTSUMRENEWAL
+,LOTSUMACCESS
+,LTLFC
+,NMFC
+,ORDERCHECKREQUIRED
+,PRIMARYCHEMCODE
+,PRIMARYHAZARDCLASS
+,RECVINVSTATUS
+,SECONDARYCHEMCODE
+,SECONDARYHAZARDCLASS
+,PUTAWAYCONFIRMATION
+,STACKHEIGHTUOM
+,TAREWEIGHT
+,TERTIARYCHEMCODE
+,productgroup
+,quaternarychemcode
+,parseruleid
+,parseentryfield
+,parseruleaction
+,returnsdisposition
+,critlevel1
+,critlevel2
+,critlevel3
+,serialasncapture
+,user1asncapture
+,user2asncapture
+,user3asncapture
+,imoprimarychemcode
+,imosecondarychemcode
+,imotertiarychemcode
+,imoquaternarychemcode
+,iataprimarychemcode
+,iatasecondarychemcode
+,iatatertiarychemcode
+,iataquaternarychemcode
+,length
+,width
+,height
+,reorderqty
+,needs_review_yn
+,use_catch_weights
+,catch_weight_out_cap_type
+,require_cyclecount_item
+,use_min_units_qty
+,min_units_qty
+,use_multiple_units_qty
+,multiple_units_qty
+,require_phyinv_item
+,require_cyclecount_lot
+,require_phyinv_lot
+,bulkcount_expdaterequired
+,bulkcount_mfgdaterequired
+,entrydate
+,restrict_lot_sub
+)
+as
+select
+custid
+,custname
+,item
+,DESCR
+,ABBREV
+,STATUS
+,RATEGROUP
+,BASEUOM
+,DISPLAYUOM
+,LASTUSER
+,LASTUPDATE
+,SHELFLIFE
+,MIN_SALE_LIFE
+,STACKHEIGHT
+,COUNTRYOF
+,EXPIRYACTION
+,VELOCITY
+,LOTREQUIRED
+,LOTRFTAG
+,SERIALREQUIRED
+,SERIALRFTAG
+,USER1REQUIRED
+,USER1RFTAG
+,USER2REQUIRED
+,USER2RFTAG
+,USER3REQUIRED
+,USER3RFTAG
+,MFGDATEREQUIRED
+,EXPDATEREQUIRED
+,NODAMAGED
+,COUNTRYREQUIRED
+,WEIGHT
+,CUBE
+,USERAMT1
+,USERAMT2
+,statusabbrev
+,baseuomabbrev
+,hazardous
+,rategroupabbrev
+,realitem
+,backorder
+,allowsub
+,qtytype
+,invstatusind
+,invstatus
+,invclassind
+,inventoryclass
+,variancepct
+,variancepct_overage
+,subslprsnrequired
+,iskit
+,lottrackinggeneration
+,lastcount
+,maxqtyof1
+,cyclecountinterval
+,labeluom
+,LOTFMTRULEID
+,LOTFMTACTION
+,SERIALFMTRULEID
+,SERIALFMTACTION
+,USER1FMTRULEID
+,USER1FMTACTION
+,USER2FMTRULEID
+,USER2FMTACTION
+,USER3FMTRULEID
+,USER3FMTACTION
+,LOTSUMBOL
+,LOTSUMRECEIPT
+,LOTSUMRENEWAL
+,LOTSUMACCESS
+,LTLFC
+,NMFC
+,ORDERCHECKREQUIRED
+,PRIMARYCHEMCODE
+,PRIMARYHAZARDCLASS
+,RECVINVSTATUS
+,SECONDARYCHEMCODE
+,SECONDARYHAZARDCLASS
+,PUTAWAYCONFIRMATION
+,STACKHEIGHTUOM
+,TAREWEIGHT
+,TERTIARYCHEMCODE
+,productgroup
+,quaternarychemcode
+,parseruleid
+,parseentryfield
+,parseruleaction
+,returnsdisposition
+,critlevel1
+,critlevel2
+,critlevel3
+,serialasncapture
+,user1asncapture
+,user2asncapture
+,user3asncapture
+,imoprimarychemcode
+,imosecondarychemcode
+,imotertiarychemcode
+,imoquaternarychemcode
+,iataprimarychemcode
+,iatasecondarychemcode
+,iatatertiarychemcode
+,iataquaternarychemcode
+,length
+,width
+,height
+,reorderqty
+,needs_review_yn
+,use_catch_weights
+,catch_weight_out_cap_type
+,require_cyclecount_item
+,use_min_units_qty
+,min_units_qty
+,use_multiple_units_qty
+,multiple_units_qty
+,require_phyinv_item
+,require_cyclecount_lot
+,require_phyinv_lot
+,bulkcount_expdaterequired
+,bulkcount_mfgdaterequired
+,entrydate
+,restrict_lot_sub
+from custaliasview
+union
+select
+custid
+,custname
+,item
+,DESCR
+,ABBREV
+,STATUS
+,RATEGROUP
+,BASEUOM
+,DISPLAYUOM
+,LASTUSER
+,LASTUPDATE
+,SHELFLIFE
+,MIN_SALE_LIFE
+,STACKHEIGHT
+,COUNTRYOF
+,EXPIRYACTION
+,VELOCITY
+,LOTREQUIRED
+,LOTRFTAG
+,SERIALREQUIRED
+,SERIALRFTAG
+,USER1REQUIRED
+,USER1RFTAG
+,USER2REQUIRED
+,USER2RFTAG
+,USER3REQUIRED
+,USER3RFTAG
+,MFGDATEREQUIRED
+,EXPDATEREQUIRED
+,NODAMAGED
+,COUNTRYREQUIRED
+,WEIGHT
+,CUBE
+,USERAMT1
+,USERAMT2
+,statusabbrev
+,baseuomabbrev
+,hazardous
+,rategroupabbrev
+,realitem
+,backorder
+,allowsub
+,qtytype
+,invstatusind
+,invstatus
+,invclassind
+,inventoryclass
+,variancepct
+,variancepct_overage
+,subslprsnrequired
+,iskit
+,lottrackinggeneration
+,lastcount
+,maxqtyof1
+,cyclecountinterval
+,labeluom
+,LOTFMTRULEID
+,LOTFMTACTION
+,SERIALFMTRULEID
+,SERIALFMTACTION
+,USER1FMTRULEID
+,USER1FMTACTION
+,USER2FMTRULEID
+,USER2FMTACTION
+,USER3FMTRULEID
+,USER3FMTACTION
+,LOTSUMBOL
+,LOTSUMRECEIPT
+,LOTSUMRENEWAL
+,LOTSUMACCESS
+,LTLFC
+,NMFC
+,ORDERCHECKREQUIRED
+,PRIMARYCHEMCODE
+,PRIMARYHAZARDCLASS
+,RECVINVSTATUS
+,SECONDARYCHEMCODE
+,SECONDARYHAZARDCLASS
+,PUTAWAYCONFIRMATION
+,STACKHEIGHTUOM
+,TAREWEIGHT
+,TERTIARYCHEMCODE
+,productgroup
+,quaternarychemcode
+,parseruleid
+,parseentryfield
+,parseruleaction
+,returnsdisposition
+,critlevel1
+,critlevel2
+,critlevel3
+,serialasncapture
+,user1asncapture
+,user2asncapture
+,user3asncapture
+,imoprimarychemcode
+,imosecondarychemcode
+,imotertiarychemcode
+,imoquaternarychemcode
+,iataprimarychemcode
+,iatasecondarychemcode
+,iatatertiarychemcode
+,iataquaternarychemcode
+,length
+,width
+,height
+,reorderqty
+,needs_review_yn
+,use_catch_weights
+,catch_weight_out_cap_type
+,require_cyclecount_item
+,use_min_units_qty
+,min_units_qty
+,use_multiple_units_qty
+,multiple_units_qty
+,require_phyinv_item
+,require_cyclecount_lot
+,require_phyinv_lot
+,bulkcount_expdaterequired
+,bulkcount_mfgdaterequired
+,entrydate
+,restrict_lot_sub
+from custitemview;
+
+comment on table allitemview is '$Id$';
+
+create or replace view pho_custitemview
+(custid
+,custname
+,item
+,DESCR
+,ABBREV
+,STATUS
+,RATEGROUP
+,BASEUOM
+,DISPLAYUOM
+,LASTUSER
+,LASTUPDATE
+,SHELFLIFE
+,MIN_SALE_LIFE
+,STACKHEIGHT
+,COUNTRYOF
+,EXPIRYACTION
+,VELOCITY
+,LOTREQUIRED
+,LOTRFTAG
+,SERIALREQUIRED
+,SERIALRFTAG
+,USER1REQUIRED
+,USER1RFTAG
+,USER2REQUIRED
+,USER2RFTAG
+,USER3REQUIRED
+,USER3RFTAG
+,MFGDATEREQUIRED
+,EXPDATEREQUIRED
+,NODAMAGED
+,COUNTRYREQUIRED
+,WEIGHT
+,CUBE
+,USERAMT1
+,USERAMT2
+,statusabbrev
+,baseuomabbrev
+,hazardous
+,rategroupabbrev
+,realitem
+,backorder
+,allowsub
+,qtytype
+,invstatusind
+,invstatus
+,invclassind
+,inventoryclass
+,variancepct
+,variancepct_overage
+,subslprsnrequired
+,iskit
+,lottrackinggeneration
+,fifowindowdays
+,productgroup
+,cartontype
+,picktotype
+,lastcount
+,maxqtyof1
+,cyclecountinterval
+,labeluom
+,LOTFMTRULEID
+,LOTFMTACTION
+,SERIALFMTRULEID
+,SERIALFMTACTION
+,USER1FMTRULEID
+,USER1FMTACTION
+,USER2FMTRULEID
+,USER2FMTACTION
+,USER3FMTRULEID
+,USER3FMTACTION
+,LOTSUMBOL
+,LOTSUMRECEIPT
+,LOTSUMRENEWAL
+,LOTSUMACCESS
+,LTLFC
+,NMFC
+,ORDERCHECKREQUIRED
+,PRIMARYCHEMCODE
+,PRIMARYHAZARDCLASS
+,RECVINVSTATUS
+,SECONDARYCHEMCODE
+,SECONDARYHAZARDCLASS
+,STACKHEIGHTUOM
+,TAREWEIGHT
+,TERTIARYCHEMCODE
+,weightcheckrequired
+,putawayconfirmation
+,quaternaryCHEMCODE
+,parseruleid
+,parseentryfield
+,parseruleaction
+,returnsdisposition
+,critlevel1
+,critlevel2
+,critlevel3
+,serialasncapture
+,user1asncapture
+,user2asncapture
+,user3asncapture
+,imoprimarychemcode
+,imosecondarychemcode
+,imotertiarychemcode
+,imoquaternarychemcode
+,iataprimarychemcode
+,iatasecondarychemcode
+,iatatertiarychemcode
+,iataquaternarychemcode
+,length
+,width
+,height
+,reorderqty
+,needs_review_yn
+,use_catch_weights
+,catch_weight_out_cap_type
+,require_cyclecount_item
+,prtlps_on_load_arrival
+,prtlps_profid
+,prtlps_def_handling
+,prtlps_putaway_dir
+,putaway_highest_whole_uom_yn
+,use_min_units_qty
+,min_units_qty
+,use_multiple_units_qty
+,multiple_units_qty
+,unkitted_class
+,pcs_per_ctn
+,ctn_per_plt
+,has_inventory
+,require_phyinv_item
+,track_picked_pf_lps
+,catch_weight_in_cap_type
+,require_cyclecount_lot
+,require_phyinv_lot
+,bulkcount_expdaterequired
+,bulkcount_mfgdaterequired
+)
+as
+select
+c.custid
+,c.name
+,i.item
+,i.DESCR
+,i.ABBREV
+,i.STATUS
+,decode(nvl(i.rategroup,'C'),'C',
+ decode(nvl(g.rategroup,'C'),'C',c.rategroup,g.rategroup),i.rategroup)
+,i.BASEUOM
+,i.DISPLAYUOM
+,i.LASTUSER
+,i.LASTUPDATE
+,nvl(i.SHELFLIFE,0)
+,nvl(i.MIN_SALE_LIFE,0)
+,nvl(i.STACKHEIGHT,0)
+,i.COUNTRYOF
+,i.EXPIRYACTION
+,i.VELOCITY
+,decode(nvl(i.lotrequired,'C'),'C',
+ decode(nvl(g.lotrequired,'C'),'C',nvl(c.lotrequired,'N'),g.lotrequired),i.lotrequired)
+,nvl(i.LOTRFTAG,nvl(g.lotrftag,nvl(c.lotrftag,'LOT')))
+,decode(nvl(i.serialrequired,'C'),'C',
+ decode(nvl(g.serialrequired,'C'),'C',nvl(c.serialrequired,'N'),g.serialrequired),i.serialrequired)
+,nvl(i.SERIALRFTAG,nvl(g.serialrftag,nvl(c.serialrftag,'SN')))
+,decode(nvl(i.user1required,'C'),'C',
+ decode(nvl(g.user1required,'C'),'C',nvl(c.user1required,'N'),g.user1required),i.user1required)
+,nvl(i.USER1RFTAG,nvl(g.user1rftag,nvl(c.user1rftag,'UITM1')))
+,decode(nvl(i.user2required,'C'),'C',
+ decode(nvl(g.user2required,'C'),'C',nvl(c.user2required,'N'),g.user2required),i.user2required)
+,nvl(i.USER2RFTAG,nvl(g.user2rftag,nvl(c.user2rftag,'UITM2')))
+,decode(nvl(i.user3required,'C'),'C',
+ decode(nvl(g.user3required,'C'),'C',nvl(c.user3required,'N'),g.user3required),i.user3required)
+,nvl(i.user3RFTAG,nvl(g.user3rftag,nvl(c.user3rftag,'UITM3')))
+,decode(nvl(i.mfgdaterequired,'C'),'C',
+ decode(nvl(g.mfgdaterequired,'C'),'C',nvl(c.mfgdaterequired,'N'),g.mfgdaterequired),i.mfgdaterequired)
+,decode(nvl(i.expdaterequired,'C'),'C',
+ decode(nvl(g.expdaterequired,'C'),'C',nvl(c.expdaterequired,'N'),g.expdaterequired),i.expdaterequired)
+,decode(nvl(i.nodamaged,'C'),'C',
+ decode(nvl(g.nodamaged,'C'),'C',nvl(c.nodamaged,'N'),g.nodamaged),i.nodamaged)
+,decode(nvl(i.countryrequired,'C'),'C',
+ decode(nvl(g.countryrequired,'C'),'C',nvl(c.countryrequired,'N'),g.countryrequired),i.countryrequired)
+,nvl(i.WEIGHT,0)
+,nvl(i.CUBE,0)
+,nvl(i.USERAMT1,0)
+,nvl(i.USERAMT2,0)
+,nvl(s.abbrev,i.status)
+,nvl(u.abbrev,i.baseuom)
+,nvl(i.hazardous,'N')
+,substr(zrt.rategroup_abbrev(i.custid,decode(nvl(i.RATEGROUP,'C'),'C',
+  decode(nvl(g.rategroup,'C'),'C',c.rategroup,g.rategroup),i.rategroup)),1,12)
+,i.item
+,decode(nvl(i.backorder,'C'),'C',
+ decode(nvl(g.backorder,'C'),'C',nvl(c.backorder,'N'),g.backorder),i.backorder)
+,decode(nvl(i.allowsub,'C'),'C',
+ decode(nvl(g.allowsub,'C'),'C',nvl(c.allowsub,'N'),g.allowsub),i.allowsub)
+,decode(nvl(i.qtytype,'C'),'C',
+ decode(nvl(g.qtytype,'C'),'C',nvl(c.qtytype,'E'),g.qtytype),i.qtytype)
+,decode(nvl(i.invstatusind,'C'),'C',
+ decode(nvl(g.invstatusind,'C'),'C',nvl(c.invstatusind,'I'),g.invstatusind),i.invstatusind)
+,decode(nvl(i.invstatusind,'C'),'C',
+ decode(nvl(g.invstatus,'C'),'C',c.invstatus,g.invstatus),i.invstatus)
+,decode(nvl(i.invclassind,'C'),'C',
+ decode(nvl(g.invclassind,'C'),'C',nvl(c.invclassind,'I'),g.invclassind),i.invclassind)
+,decode(nvl(i.invclassind,'C'),'C',
+ decode(nvl(g.inventoryclass,'C'),'C',c.inventoryclass,g.inventoryclass),i.inventoryclass)
+,decode(nvl(i.variancepct_use_default,'Y'),'N',nvl(i.variancepct,0),
+        decode(nvl(g.variancepct_use_default,'Y'),'N',nvl(g.variancepct,0),nvl(c.variancepct,0)))
+,decode(nvl(i.variancepct_use_default,'Y'),'N',nvl(i.variancepct_overage,0),
+        decode(nvl(g.variancepct_use_default,'Y'),'N',nvl(g.variancepct_overage,0),nvl(c.variancepct_overage,0)))
+,decode(nvl(i.subslprsnrequired,'C'),'C',
+ decode(nvl(g.subslprsnrequired,'C'),'C',nvl(c.subslprsnrequired,'N'),g.subslprsnrequired),
+ i.subslprsnrequired)
+,nvl(i.iskit,'N')
+,lottrackinggeneration
+,decode(i.use_fifo,
+ 'C',decode(nvl(g.use_fifo,'C'),'C',c.fifowindowdays,g.fifowindowdays),
+ 'Y',i.fifowindowdays,
+ null)
+,i.productgroup
+,cartontype
+,picktotype
+,lastcount
+,decode(nvl(i.maxqtyof1,'C'),'C',
+ decode(nvl(g.maxqtyof1,'C'),'C',nvl(c.maxqtyof1,'N')),i.maxqtyof1)
+,nvl(i.cyclecountinterval,0)
+,i.labeluom
+,nvl(i.lotfmtruleid,nvl(g.lotfmtruleid,c.lotfmtruleid))
+,decode(nvl(i.lotfmtaction,'C'),'C',
+ decode(nvl(g.lotfmtaction,'C'),'C',nvl(c.lotfmtaction,'W'),g.lotfmtaction),
+ i.lotfmtaction)
+,nvl(i.serialfmtruleid,nvl(g.serialfmtruleid,c.serialfmtruleid))
+,decode(nvl(i.serialfmtaction,'C'),'C',
+ decode(nvl(g.serialfmtaction,'C'),'C',nvl(c.serialfmtaction,'W'),g.serialfmtaction),
+ i.serialfmtaction)
+,nvl(i.user1fmtruleid,nvl(g.user1fmtruleid,c.user1fmtruleid))
+,decode(nvl(i.user1fmtaction,'C'),'C',
+ decode(nvl(g.user1fmtaction,'C'),'C',nvl(c.user1fmtaction,'W'),g.user1fmtaction),
+ i.user1fmtaction)
+,nvl(i.user2fmtruleid,nvl(g.user2fmtruleid,c.user2fmtruleid))
+,decode(nvl(i.user2fmtaction,'C'),'C',
+ decode(nvl(g.user2fmtaction,'C'),'C',nvl(c.user2fmtaction,'W'),g.user2fmtaction),
+ i.user2fmtaction)
+,nvl(i.user3fmtruleid,nvl(g.user3fmtruleid,c.user3fmtruleid))
+,decode(nvl(i.user3fmtaction,'C'),'C',
+ decode(nvl(g.user3fmtaction,'C'),'C',nvl(c.user3fmtaction,'W'),g.user3fmtaction),
+ i.user3fmtaction)
+,nvl(i.LOTSUMBOL,'N')
+,nvl(i.LOTSUMRECEIPT,'N')
+,nvl(i.LOTSUMRENEWAL,'N')
+,nvl(i.LOTSUMACCESS,'N')
+,i.LTLFC
+,i.NMFC
+,decode(nvl(i.ordercheckrequired,'C'),'C',
+ decode(nvl(g.ordercheckrequired,'C'),'C',nvl(c.ordercheckrequired,'N'),
+ g.ordercheckrequired),i.ordercheckrequired)
+,i.PRIMARYCHEMCODE
+,i.PRIMARYHAZARDCLASS
+,i.RECVINVSTATUS
+,i.SECONDARYCHEMCODE
+,i.SECONDARYHAZARDCLASS
+,i.STACKHEIGHTUOM
+,i.TAREWEIGHT
+,i.TERTIARYCHEMCODE
+,decode(nvl(i.weightcheckrequired,'C'),'C',
+ decode(nvl(g.weightcheckrequired,'C'),'C',nvl(c.weightcheckrequired,'N'),
+ g.weightcheckrequired),i.weightcheckrequired)
+,decode(nvl(i.putawayconfirmation,'C'),'C',
+ decode(nvl(g.putawayconfirmation,'C'),'C',nvl(c.putawayconfirmation,'1'),
+ g.putawayconfirmation),i.putawayconfirmation)
+,i.quaternARYCHEMCODE
+,nvl(i.parseruleid,nvl(g.parseruleid,c.parseruleid))
+,nvl(i.parseentryfield,nvl(g.parseentryfield,c.parseentryfield))
+,decode(nvl(i.parseruleaction,'C'),'C',
+ decode(nvl(g.parseruleaction,'C'),'C',nvl(c.parseruleaction,'N'),
+ g.parseruleaction),i.parseruleaction)
+,nvl(i.returnsdisposition,nvl(g.returnsdisposition, c.returnsdisposition))
+,nvl(i.critlevel1,nvl(g.critlevel1,30))
+,nvl(i.critlevel2,nvl(g.critlevel2,60))
+,nvl(i.critlevel3,nvl(g.critlevel3,90))
+,decode(nvl(i.serialasncapture,'C'),'C',
+ decode(nvl(g.serialasncapture,'C'),'C',nvl(c.serialasncapture,'N'),
+ g.serialasncapture),i.serialasncapture)
+,decode(nvl(i.user1asncapture,'C'),'C',
+ decode(nvl(g.user1asncapture,'C'),'C',nvl(c.user1asncapture,'N'),
+ g.user1asncapture),i.user1asncapture)
+,decode(nvl(i.user2asncapture,'C'),'C',
+ decode(nvl(g.user2asncapture,'C'),'C',nvl(c.user2asncapture,'N'),
+ g.user2asncapture),i.user2asncapture)
+,decode(nvl(i.user3asncapture,'C'),'C',
+ decode(nvl(g.user3asncapture,'C'),'C',nvl(c.user3asncapture,'N'),
+ g.user3asncapture),i.user3asncapture)
+,imoprimarychemcode
+,imosecondarychemcode
+,imotertiarychemcode
+,imoquaternarychemcode
+,iataprimarychemcode
+,iatasecondarychemcode
+,iatatertiarychemcode
+,iataquaternarychemcode
+,nvl(i.length,0)
+,nvl(i.width,0)
+,nvl(i.height,0)
+,i.reorderqty
+,nvl(i.needs_review_yn,'N')
+,decode(nvl(i.use_catch_weights,'C'),'C',
+ decode(nvl(g.use_catch_weights,'C'),'C',nvl(c.use_catch_weights,'N'),
+ g.use_catch_weights),i.use_catch_weights)
+,nvl(i.catch_weight_out_cap_type,nvl(g.catch_weight_out_cap_type,c.catch_weight_out_cap_type))
+,decode(nvl(i.require_cyclecount_item,'C'),'C',
+ decode(nvl(g.require_cyclecount_item,'C'),'C',nvl(c.require_cyclecount_item,'Y'),
+ g.require_cyclecount_item),i.require_cyclecount_item)
+,decode(nvl(i.prtlps_on_load_arrival,'C'),
+  'C', nvl(c.prtlps_on_load_arrival,'N'),
+       i.prtlps_on_load_arrival)
+,decode(nvl(i.prtlps_on_load_arrival,'C'),
+  'C', c.prtlps_profid,
+       i.prtlps_profid)
+,decode(nvl(i.prtlps_on_load_arrival,'C'),
+  'C', c.prtlps_def_handling,
+       i.prtlps_def_handling)
+,decode(nvl(i.prtlps_on_load_arrival,'C'),
+  'C', c.prtlps_putaway_dir,
+       i.prtlps_putaway_dir)
+,decode(nvl(i.putaway_highest_whole_uom_yn,'C'),
+   'C', decode(nvl(g.putaway_highest_whole_uom_yn,'C'),
+        'C',nvl(c.putaway_highest_whole_uom_yn,'N'),
+            g.putaway_highest_whole_uom_yn),
+        i.putaway_highest_whole_uom_yn)
+,decode(nvl(i.use_min_units_qty,'C'),'C',
+        nvl(g.use_min_units_qty,'N'),i.use_min_units_qty)
+,decode(nvl(i.min_units_qty,0),0,
+        nvl(g.min_units_qty,1),i.min_units_qty)
+,decode(nvl(i.use_multiple_units_qty,'C'),'C',
+        nvl(g.use_multiple_units_qty,'N'),i.use_multiple_units_qty)
+,decode(nvl(i.multiple_units_qty,0),0,
+        nvl(g.multiple_units_qty,1),i.multiple_units_qty)
+,i.unkitted_class
+,zlbl.uom_qty_conv(i.custid,i.item,1,'CTN','PCS')
+,zlbl.uom_qty_conv(i.custid,i.item,1,'PLT','CTN')
+,nvl((select 1 from plate pl where pl.custid = i.custid and pl.item = i.item and rownum = 1),0)
+,decode(nvl(i.require_phyinv_item,'C'),'C',
+ decode(nvl(g.require_phyinv_item,'C'),'C',nvl(ca.require_phyinv_item,'Y'),
+ g.require_phyinv_item),i.require_phyinv_item)
+,decode(nvl(i.track_picked_pf_lps,'C'),
+   'C', decode(nvl(g.track_picked_pf_lps,'C'),
+        'C',nvl(ca.track_picked_pf_lps,'N'),
+            g.track_picked_pf_lps),
+        i.track_picked_pf_lps)
+,i.catch_weight_in_cap_type
+,decode(nvl(i.require_cyclecount_lot,'C'),'C',
+ decode(nvl(g.require_cyclecount_lot,'C'),'C',nvl(ca.require_cyclecount_lot,'Y'),
+ g.require_cyclecount_lot),i.require_cyclecount_lot)
+,decode(nvl(i.require_phyinv_lot,'C'),'C',
+ decode(nvl(g.require_phyinv_lot,'C'),'C',nvl(ca.require_phyinv_lot,'Y'),
+ g.require_phyinv_lot),i.require_phyinv_lot)
+,nvl(i.bulkcount_expdaterequired,'N')
+,nvl(i.bulkcount_mfgdaterequired,'N')
+from itemstatus s, unitsofmeasure u,
+     customer c, custproductgroup g, custitem i,
+     customer_aux ca
+where i.custid = c.custid
+  and i.custid = g.custid(+)
+  and i.productgroup = g.productgroup(+)
+  and i.baseuom = u.code(+)
+  and i.status = s.code(+)
+  and c.custid = ca.custid(+);
+
+comment on table pho_custitemview is '$Id$';
+
+exit;

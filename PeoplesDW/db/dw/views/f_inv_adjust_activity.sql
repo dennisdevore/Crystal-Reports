@@ -1,0 +1,45 @@
+create or replace view f_inv_adjust_activity as
+select
+  sys_context('USERENV','SERVICE_NAME') DB_Service_Name,
+  a.whenoccurred Modification_Time,
+  a.lpid,
+  a.facility,
+  a.custid as customer,
+  a.item,
+  a.lotnumber as lot_number,
+  a.inventoryclass as inventory_class,
+  c.abbrev as inventory_class_desc,
+  a.invstatus as inventory_status,
+  f.abbrev as inventory_status_desc,
+  a.custreference as customer_reference,
+  a.adjreason as adjustment_reason,
+  b.abbrev as adjustment_reason_desc,
+  a.adjqty as adjustment_qty,
+  a.adjweight as adjustment_weight,
+  a.serialnumber as serial_number,
+  a.useritem1 as user_item_1,
+  a.useritem2 as user_item_2,
+  a.useritem3 as user_item_3,
+  a.oldcustid as old_customer,
+  a.newcustid as new_customer,
+  a.olditem as old_item,
+  a.newitem as new_item,
+  a.oldlotnumber as old_lot_number,
+  a.newlotnumber as new_lot_number,
+  a.oldinventoryclass as old_inventory_class,
+  d.abbrev as old_inventory_class_desc,
+  a.newinventoryclass as new_inventory_class,
+  e.abbrev as new_inventory_class_desc,
+  a.oldinvstatus as old_inventory_status,
+  g.abbrev as old_inventory_status_desc,
+  a.newinvstatus as new_inventory_status,
+  h.abbrev as new_inventory_status_desc,
+  a.lastuser as last_update_user,
+  a.lastupdate as last_update_time
+from alps.invadjactivity a, alps.adjustmentreasons b, alps.inventoryclass c,
+  alps.inventoryclass d, alps.inventoryclass e, alps.inventorystatus f, 
+  alps.inventorystatus g, alps.inventorystatus h
+where a.adjreason = b.code(+) and a.inventoryclass = c.code(+)
+  and a.oldinventoryclass = d.code(+) and a.newinventoryclass = e.code(+)
+  and a.invstatus = f.code(+) and a.oldinvstatus = g.code(+)
+  and a.newinvstatus = h.code(+);

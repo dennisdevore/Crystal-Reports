@@ -1,0 +1,15 @@
+--
+-- $Id: import_944_seq.sql 1 2007-02-12 00:00:00Z eric $
+--
+
+---- drop sequence ALPS.IMPORT_944_SEQ;
+
+CREATE SEQUENCE ALPS.IMPORT_944_SEQ
+  START WITH 1
+  MAXVALUE 999999999
+  MINVALUE 1
+  CYCLE
+  NOCACHE
+  NOORDER;
+
+exit;

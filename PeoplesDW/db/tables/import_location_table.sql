@@ -1,0 +1,36 @@
+create table import_location_table
+(
+  load_sequence     number(7),
+  record_sequence   number(7),
+  locid             varchar2(10),
+  facility          varchar2(3),
+  loctype           varchar2(3),
+  storagetype       varchar2(2),
+  section           varchar2(10),
+  checkdigit        varchar2(2),
+  status            varchar2(2),
+  pickingseq        number(7),
+  pickingzone       varchar2(10),
+  putawayseq        number(7),
+  putawayzone       varchar2(10),
+  inboundzone       varchar2(10),
+  outboundzone      varchar2(10),
+  panddlocation     varchar2(10),
+  equipprof         varchar2(2),
+  velocity          varchar2(1),
+  mixeditemsok      varchar2(1),
+  mixedlotsok       varchar2(1),
+  mixeduomok        varchar2(1),
+  countinterval     number(4),
+  unitofstorage     varchar2(4),
+  descr             varchar2(36),
+  weightlimit       number(17,8),
+  aisle             varchar2(5),
+  stackheight       number(3),
+  count_after_pick  char(1),
+  mixedcustsok      char(1),
+  lastuser          varchar2(12),
+  lastupdate        date
+);
+
+

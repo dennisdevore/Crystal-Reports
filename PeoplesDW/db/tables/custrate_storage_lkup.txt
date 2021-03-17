@@ -1,0 +1,13 @@
+create table custrate_storage_lkup (
+  custid varchar2(10),
+  facility varchar2(3),
+  rategroup varchar2(10),
+  activity varchar2(4),
+  effdate date,
+  rate number(12,6) not null,
+  total_pallets number default 0,
+  constraint pk_custrate_storage_lkup primary key (custid, facility, rategroup, activity, effdate)
+);
+
+exit;
+/

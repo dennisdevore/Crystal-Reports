@@ -1,0 +1,57 @@
+create or replace view custitemdictview as
+SELECT 
+    CUSTITEM.CUSTID, CUSTITEM.ITEM, CUSTDICT.FIELDNAME, CUSTDICT.LABELVALUE
+FROM
+    ALPS.CUSTITEM CUSTITEM,
+    ALPS.CUSTDICT CUSTDICT
+WHERE
+    CUSTITEM.CUSTID = CUSTDICT.CUSTID 
+union
+SELECT 
+    CUSTITEM.CUSTID, CUSTITEM.ITEM, 'LOTNUMBER' as FIELDNAME, 'LOTNUMBER' as LABELVALUE
+FROM
+    ALPS.CUSTITEM CUSTITEM,
+    ALPS.CUSTDICT CUSTDICT
+WHERE
+    CUSTITEM.CUSTID = CUSTDICT.CUSTID
+	and not exists (select fieldname from custdict where custid = custitem.custid and fieldname='LOTNUMBER')
+union
+SELECT 
+    CUSTITEM.CUSTID, CUSTITEM.ITEM, 'SERIALNUMBER' as FIELDNAME, 'SERIALNUMBER' as LABELVALUE
+FROM
+    ALPS.CUSTITEM CUSTITEM,
+    ALPS.CUSTDICT CUSTDICT
+WHERE
+    CUSTITEM.CUSTID = CUSTDICT.CUSTID
+	and not exists (select fieldname from custdict where custid = custitem.custid and fieldname='SERIALNUMBER')
+union
+SELECT 
+    CUSTITEM.CUSTID, CUSTITEM.ITEM, 'USERITEM1' as FIELDNAME, 'USERITEM1' as LABELVALUE
+FROM
+    ALPS.CUSTITEM CUSTITEM,
+    ALPS.CUSTDICT CUSTDICT
+WHERE
+    CUSTITEM.CUSTID = CUSTDICT.CUSTID
+	and not exists (select fieldname from custdict where custid = custitem.custid and fieldname='USERITEM1')
+union
+SELECT 
+    CUSTITEM.CUSTID, CUSTITEM.ITEM, 'USERITEM2' as FIELDNAME, 'USERITEM2' as LABELVALUE
+FROM
+    ALPS.CUSTITEM CUSTITEM,
+    ALPS.CUSTDICT CUSTDICT
+WHERE
+    CUSTITEM.CUSTID = CUSTDICT.CUSTID
+	and not exists (select fieldname from custdict where custid = custitem.custid and fieldname='USERITEM2')
+union
+SELECT 
+    CUSTITEM.CUSTID, CUSTITEM.ITEM, 'USERITEM3' as FIELDNAME, 'USERITEM3' as LABELVALUE
+FROM
+    ALPS.CUSTITEM CUSTITEM,
+    ALPS.CUSTDICT CUSTDICT
+WHERE
+    CUSTITEM.CUSTID = CUSTDICT.CUSTID
+	and not exists (select fieldname from custdict where custid = custitem.custid and fieldname='USERITEM3');
+
+comment on table custitemdictview is '$Id$';
+
+exit;

@@ -1,0 +1,28 @@
+drop table pending_charges;
+
+create global temporary table pending_charges (
+FACILITY    VARCHAR2(3),
+CUSTID      VARCHAR2(10),
+CUSTNAME    VARCHAR2(40),
+INVOICE     NUMBER(8),
+ORDERID     NUMBER(9),
+SHIPID      NUMBER(2),
+INVTYPE     VARCHAR2(1),
+item varchar2(50),
+LOTNUMBER   VARCHAR2(30),
+ACTIVITY    VARCHAR2(4),
+ACTIVITYDESC VARCHAR2(32),
+ACTIVITYDATE DATE,
+BILLMETHOD  VARCHAR2(4),
+BILLMETHODDESC VARCHAR2(32),
+QTY         NUMBER(9,2),
+WEIGHT      NUMBER(17,8),
+UOM         VARCHAR2(4),
+RATE        NUMBER(12,6),
+AMT         NUMBER(10,2),
+MODUOM      VARCHAR2(4),
+ACTIVITYDATETIME DATE,
+COMMENT1    CLOB
+) on commit preserve rows;
+
+exit;

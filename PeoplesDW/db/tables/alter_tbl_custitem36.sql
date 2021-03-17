@@ -1,0 +1,77 @@
+--
+-- $Id: alter_tbl_custitem36.sql 1 2006-09-06 00:00:00Z eric $
+--
+alter table custitem add
+(
+   sara_pt_gas_yn        char(1) default 'N',
+   sara_pt_mixture_yn    char(1) default 'N',
+   sara_pt_liquid_yn     char(1) default 'N',
+   sara_pt_pure_yn       char(1) default 'N',
+   sara_pt_solid_yn      char(1) default 'N',
+   sara_hc_delayed_yn    char(1) default 'N',
+   sara_hc_immediate_yn  char(1) default 'N',
+   sara_hc_fire_yn       char(1) default 'N',
+   sara_hc_reactivity_yn char(1) default 'N',
+   sara_hc_pressure_yn   char(1) default 'N',
+   sara_ct_container     char(1),
+   sara_ct_pressure      char(1),
+   sara_ct_temperature   char(1),
+   sara_trade_secret_yn  char(1) default 'N',
+   sara_cas_number1      varchar2(12),
+   sara_cas_percent1     number(5,2),
+   sara_cas_number2      varchar2(12),
+   sara_cas_percent2     number(5,2),
+   sara_cas_number3      varchar2(12),
+   sara_cas_percent3     number(5,2),
+   sara_cas_number4      varchar2(12),
+   sara_cas_percent4     number(5,2),
+   sara_cas_number5      varchar2(12),
+   sara_cas_percent5     number(5,2),
+   sara_cas_number6      varchar2(12),
+   sara_cas_percent6     number(5,2),
+   sara_cas_number7      varchar2(12),
+   sara_cas_percent7     number(5,2),
+   sara_cas_number8      varchar2(12),
+   sara_cas_percent8     number(5,2),
+   sara_cas_number9      varchar2(12),
+   sara_cas_percent9     number(5,2),
+   sara_cas_number10     varchar2(12),
+   sara_cas_percent10    number(5,2),
+   sara_cas_number11     varchar2(12),
+   sara_cas_percent11    number(5,2),
+   sara_cas_number12     varchar2(12),
+   sara_cas_percent12    number(5,2),
+   sara_cas_number13     varchar2(12),
+   sara_cas_percent13    number(5,2),
+   sara_cas_number14     varchar2(12),
+   sara_cas_percent14    number(5,2),
+   sara_cas_number15     varchar2(12),
+   sara_cas_percent15    number(5,2),
+   sara_cas_number16     varchar2(12),
+   sara_cas_percent16    number(5,2),
+   sara_cas_number17     varchar2(12),
+   sara_cas_percent17    number(5,2),
+   sara_cas_number18     varchar2(12),
+   sara_cas_percent18    number(5,2),
+   sara_cas_number19     varchar2(12),
+   sara_cas_percent19    number(5,2),
+   sara_cas_number20     varchar2(12),
+   sara_cas_percent20    number(5,2)
+);
+
+update custitem set 
+   sara_pt_gas_yn        = 'N',
+   sara_pt_mixture_yn    = 'N',
+   sara_pt_liquid_yn     = 'N',
+   sara_pt_pure_yn       = 'N',
+   sara_pt_solid_yn      = 'N',
+   sara_hc_delayed_yn    = 'N',
+   sara_hc_immediate_yn  = 'N',
+   sara_hc_fire_yn       = 'N',
+   sara_hc_reactivity_yn = 'N',
+   sara_hc_pressure_yn   = 'N',
+   sara_trade_secret_yn  = 'N';
+
+commit;
+
+exit;

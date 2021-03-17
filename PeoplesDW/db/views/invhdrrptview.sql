@@ -1,0 +1,271 @@
+create or replace view invhdrrpt_custaddr
+(
+ custid,
+ name,
+ sumassessorial,
+ rcptname,
+ rcptcontact,
+ rcptaddr1,
+ rcptaddr2,
+ rcptcity,
+ rcptstate,
+ rcptpostalcode,
+ rcptcountrycode,
+ rcptphone,
+ rcptfax,
+ rcptemail,
+ rnewname,
+ rnewcontact,
+ rnewaddr1,
+ rnewaddr2,
+ rnewcity,
+ rnewstate,
+ rnewpostalcode,
+ rnewcountrycode,
+ rnewphone,
+ rnewfax,
+ rnewemail,
+ miscname,
+ misccontact,
+ miscaddr1,
+ miscaddr2,
+ misccity,
+ miscstate,
+ miscpostalcode,
+ misccountrycode,
+ miscphone,
+ miscfax,
+ miscemail,
+ outbname,
+ outbcontact,
+ outbaddr1,
+ outbaddr2,
+ outbcity,
+ outbstate,
+ outbpostalcode,
+ outbcountrycode,
+ outbphone,
+ outbfax,
+ outbemail
+)
+as
+select custid,
+       name,
+       NVL(sumassessorial,'N'),
+       decode(rcptname,null,name,rcptname),
+       decode(rcptname,null,contact,rcptcontact),
+       decode(rcptname,null,addr1,rcptaddr1),
+       decode(rcptname,null,addr2,rcptaddr2),
+       decode(rcptname,null,city,rcptcity),
+       decode(rcptname,null,state,rcptstate),
+       decode(rcptname,null,postalcode,rcptpostalcode),
+       decode(rcptname,null,countrycode,rcptcountrycode),
+       decode(rcptname,null,phone,rcptphone),
+       decode(rcptname,null,fax,rcptfax),
+       decode(rcptname,null,email,rcptemail),
+       decode(rnewname,null,name,rnewname),
+       decode(rnewname,null,contact,rnewcontact),
+       decode(rnewname,null,addr1,rnewaddr1),
+       decode(rnewname,null,addr2,rnewaddr2),
+       decode(rnewname,null,city,rnewcity),
+       decode(rnewname,null,state,rnewstate),
+       decode(rnewname,null,postalcode,rnewpostalcode),
+       decode(rnewname,null,countrycode,rnewcountrycode),
+       decode(rnewname,null,phone,rcptphone),
+       decode(rnewname,null,fax,rnewfax),
+       decode(rnewname,null,email,rnewemail),
+       decode(miscname,null,name,miscname),
+       decode(miscname,null,contact,misccontact),
+       decode(miscname,null,addr1,miscaddr1),
+       decode(miscname,null,addr2,miscaddr2),
+       decode(miscname,null,city,misccity),
+       decode(miscname,null,state,miscstate),
+       decode(miscname,null,postalcode,miscpostalcode),
+       decode(miscname,null,countrycode,misccountrycode),
+       decode(miscname,null,phone,rcptphone),
+       decode(miscname,null,fax,miscfax),
+       decode(miscname,null,email,miscemail),
+       decode(outbname,null,name,outbname),
+       decode(outbname,null,contact,outbcontact),
+       decode(outbname,null,addr1,outbaddr1),
+       decode(outbname,null,addr2,outbaddr2),
+       decode(outbname,null,city,outbcity),
+       decode(outbname,null,state,outbstate),
+       decode(outbname,null,postalcode,outbpostalcode),
+       decode(outbname,null,countrycode,outbcountrycode),
+       decode(outbname,null,phone,rcptphone),
+       decode(outbname,null,fax,outbfax),
+       decode(outbname,null,email,outbemail)
+  from customer;
+
+comment on table invhdrrpt_custaddr is '$Id$';
+
+create or replace view invoicehdrrpt
+(
+ masterinvoice,
+ invoice,
+ invdate,
+ invoicedate,
+ invtypecode,
+ invtype,
+ invstatus,
+ invstatusdesc,
+ custid,
+ custname,
+ facility,
+ postdate,
+ printdate,
+ invtotal,
+ item_label,
+ lot_label,
+ name,
+ contact,
+ addr1,
+ addr2,
+ city,
+ state,
+ postalcode,
+ countrycode,
+ phone,
+ fax,
+ email,
+ rcvddate,
+ prono,
+ loadno,
+ carrier,
+ sumassessorial,
+ reference,
+ renewfromdate,
+ renewtodate,
+ orderid,
+ shipid,
+ po,
+ scac,
+ shiptoname,
+ invoicecount
+)
+as
+select H.masterinvoice,
+       H.invoice,
+       H.invdate,
+       H.invoicedate,
+       IT.code,
+       IT.abbrev,
+       H.invstatus,
+       NVL(B.abbrev,'UNKNOWN'),
+       H.custid,
+       C.name,
+       H.facility,
+       H.postdate,
+       H.printdate,
+       zbut.invoice_total(H.invoice, H.invtype),
+       zcu.item_label(H.custid),
+       zcu.lot_label(H.custid),
+       decode(H.invtype,'R',C.rcptname,'S',C.rnewname,'A',outbname,C.miscname),
+       decode(H.invtype,'R',C.rcptcontact,'S',C.rnewcontact,'A',outbcontact,C.misccontact),
+       decode(H.invtype,'R',C.rcptaddr1,'S',C.rnewaddr1,'A',outbaddr1,C.miscaddr1),
+       decode(H.invtype,'R',C.rcptaddr2,'S',C.rnewaddr2,'A',outbaddr2,C.miscaddr2),
+       decode(H.invtype,'R',C.rcptcity,'S',C.rnewcity,'A',outbcity,C.misccity),
+       decode(H.invtype,'R',C.rcptstate,'S',C.rnewstate,'A',outbstate,C.miscstate),
+       decode(H.invtype,'R',C.rcptpostalcode,'S',C.rnewpostalcode,'A',outbpostalcode,C.miscpostalcode),
+       decode(H.invtype,'R',C.rcptcountrycode,'S',C.rnewcountrycode,'A',outbcountrycode,C.misccountrycode),
+       decode(H.invtype,'R',C.rcptphone,'S',C.rnewphone,'A',outbphone,C.miscphone),
+       decode(H.invtype,'R',C.rcptfax,'S',C.rnewfax,'A',outbfax,C.miscfax),
+       decode(H.invtype,'R',C.rcptemail,'S',C.rnewemail,'A',outbemail,C.miscemail),
+       L.rcvddate,
+       L.prono,
+       L.loadno,
+       CR.name,
+       decode(C.sumassessorial,
+                'Y','Y',
+                substr(zbut.invoice_check_sum(H.invoice),1,1)),
+       null,
+       H.renewfromdate,
+       H.renewtodate,
+       null,
+       null,
+       null,
+       null,
+       null,
+       (select count(distinct invtype) from invoicehdr H2 where H2.masterinvoice=H.masterinvoice)
+  from invoicehdr H, invhdrrpt_custaddr C, invoicetypes IT, billstatus B,
+       loads L, carrier CR
+ where H.custid = C.custid (+)
+   and H.invtype = IT.code (+)
+   and H.invstatus = B.code (+)
+   and H.loadno = L.loadno(+)
+   and L.carrier = CR.carrier(+)
+   and not exists(
+   select 1
+	   from invoicedtl DTL, orderhdr OH
+	  where DTL.invoice = H.invoice
+	    and DTL.orderid = H.orderid
+	    and DTL.orderid = OH.orderid
+		  and DTL.shipid = OH.shipid)
+union
+select H.masterinvoice,
+       H.invoice,
+       H.invdate,
+       H.invoicedate,
+       IT.code,
+       IT.abbrev,
+       H.invstatus,
+       NVL(B.abbrev,'UNKNOWN'),
+       H.custid,
+       C.name,
+       H.facility,
+       H.postdate,
+       H.printdate,
+       zbut.invoice_total(H.invoice, H.invtype),
+       zcu.item_label(H.custid),
+       zcu.lot_label(H.custid),
+       decode(H.invtype,'R',C.rcptname,'S',C.rnewname,'A',outbname,C.miscname),
+       decode(H.invtype,'R',C.rcptcontact,'S',C.rnewcontact,'A',outbcontact,C.misccontact),
+       decode(H.invtype,'R',C.rcptaddr1,'S',C.rnewaddr1,'A',outbaddr1,C.miscaddr1),
+       decode(H.invtype,'R',C.rcptaddr2,'S',C.rnewaddr2,'A',outbaddr2,C.miscaddr2),
+       decode(H.invtype,'R',C.rcptcity,'S',C.rnewcity,'A',outbcity,C.misccity),
+       decode(H.invtype,'R',C.rcptstate,'S',C.rnewstate,'A',outbstate,C.miscstate),
+       decode(H.invtype,'R',C.rcptpostalcode,'S',C.rnewpostalcode,'A',outbpostalcode,C.miscpostalcode),
+       decode(H.invtype,'R',C.rcptcountrycode,'S',C.rnewcountrycode,'A',outbcountrycode,C.misccountrycode),
+       decode(H.invtype,'R',C.rcptphone,'S',C.rnewphone,'A',outbphone,C.miscphone),
+       decode(H.invtype,'R',C.rcptfax,'S',C.rnewfax,'A',outbfax,C.miscfax),
+       decode(H.invtype,'R',C.rcptemail,'S',C.rnewemail,'A',outbemail,C.miscemail),
+       L.rcvddate,
+       L.prono,
+       L.loadno,
+       CR.name,
+       decode(C.sumassessorial,
+                'Y','Y',
+                substr(zbut.invoice_check_sum(H.invoice),1,1)),
+       OH.reference,
+       H.renewfromdate,
+       H.renewtodate,
+       OH.orderid,
+       OH.shipid,
+       OH.po,
+       CA.scac,
+       decode(OH.shiptoname,null,CO.name,OH.shiptoname),
+       (select count(distinct invtype) from invoicehdr H2 where H2.masterinvoice=H.masterinvoice)
+  from invoicehdr H, invhdrrpt_custaddr C, invoicetypes IT, billstatus B,
+       loads L, carrier CR, orderhdr OH, carrier CA, consignee CO
+ where H.custid = C.custid
+   and H.invtype = IT.code (+)
+   and H.invstatus = B.code (+)
+   and H.loadno = L.loadno(+)
+   and L.carrier = CR.carrier(+)
+   and H.orderid = OH.orderid
+   and OH.carrier = CA.carrier(+)
+   and OH.shipto = CO.consignee(+)
+   and exists(
+   select 1
+	   from invoicedtl DTL
+	  where DTL.invoice = H.invoice
+	    and DTL.orderid = OH.orderid
+		  and DTL.shipid = OH.shipid);
+
+comment on table invoicehdrrpt is '$Id$';
+
+
+exit;
+
+

@@ -1,0 +1,37 @@
+CREATE OR REPLACE VIEW ALPS.lbldtvltlshipview
+(
+    PO,
+    ORDERID,
+    LPID,
+    FROMLPID,
+    PARENTLPID,
+    REFERENCE,
+    SHIPTONAME,
+    SHIPTOADDR1,
+    SHIPTOADDR2,
+    SHIPTOCITY,
+    SHIPTOSTATE,
+    SHIPTOPOSTALCODE,
+    SHIPTOPHONE
+)
+AS
+SELECT  ORDERHDR.PO, ORDERHDR.ORDERID, SHIPPINGPLATE.LPID, SHIPPINGPLATE.FROMLPID, SHIPPINGPLATE.PARENTLPID, ORDERHDR.REFERENCE,
+       decode(ORDERHDR.shiptoname,null,CONSIGNEE.name,ORDERHDR.shiptoname),
+       decode(ORDERHDR.shiptoname,null,CONSIGNEE.addr1, ORDERHDR.shiptoaddr1),
+       decode(ORDERHDR.shiptoname,null,CONSIGNEE.addr2, ORDERHDR.shiptoaddr2),
+       decode(ORDERHDR.shiptoname,null,CONSIGNEE.city, ORDERHDR.shiptocity),
+       decode(ORDERHDR.shiptoname,null,CONSIGNEE.state, ORDERHDR.shiptostate),
+       decode(ORDERHDR.shiptoname,null,CONSIGNEE.postalcode, ORDERHDR.shiptopostalcode),
+       decode(ORDERHDR.shiptoname,null,CONSIGNEE.countrycode, ORDERHDR.shiptocountrycode)
+    FROM  ORDERHDR, SHIPPINGPLATE, CONSIGNEE
+    WHERE  nvl(ORDERHDR.CONSIGNEE,ORDERHDR.SHIPTO) = CONSIGNEE.CONSIGNEE(+) AND
+    ORDERHDR.ORDERID = SHIPPINGPLATE.ORDERID AND
+    ORDERHDR.SHIPID = SHIPPINGPLATE.SHIPID AND
+    ORDERHDR.SHIPTYPE IN ('T','L') AND
+    SHIPPINGPLATE.TYPE IN ('M','F') AND
+    ORDERHDR.CUSTID ='17131' AND
+    SHIPPINGPLATE.PARENTLPID IS NULL AND
+    ORDERHDR.ORDERTYPE != 'V';
+
+comment on table lbldtvltlshipview is '$Id';
+exit;

@@ -1,0 +1,10 @@
+alter table picktypelabel drop constraint pk_picktypelabel;
+alter table shipshortreasons drop constraint pk_shipshortreasons;
+alter table picktypelabel modify code not null;
+alter table picktypelabel modify descr not null;
+alter table picktypelabel modify abbrev not null;
+alter table shipshortreasons drop constraint pk_shipshortreasons;
+alter table shipshortreasons modify code not null;
+alter table shipshortreasons modify descr not null;
+alter table shipshortreasons modify abbrev not null;
+exit;

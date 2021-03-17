@@ -1,0 +1,1 @@
+alter table temp_outbound_shipmodify nameid not null;exit;

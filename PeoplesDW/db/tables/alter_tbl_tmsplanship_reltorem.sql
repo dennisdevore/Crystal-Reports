@@ -1,0 +1,15 @@
+--
+-- $Id$
+--
+CREATE TABLE ALPS.TMSPLANSHIP_RELTOREM 
+(
+    TRANSMISSIONCREATEDATETIME DATE             NULL,
+    SENDERTRANSMISSIONNO       NUMBER           NULL,
+    REFERENCETRANSMISSIONNO    NUMBER           NULL,
+    RELEASE                    VARCHAR2(40)     NULL,
+    REMARKSEQUENCE             NUMBER           NULL,
+    REMARKQUALIFIER            VARCHAR2(40)     NULL,
+    REMARKLEVEL                NUMBER           NULL,
+    REMARKTEXT                 VARCHAR2(60)     NULL
+);
+exit;

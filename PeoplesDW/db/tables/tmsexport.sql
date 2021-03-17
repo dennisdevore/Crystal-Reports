@@ -1,0 +1,22 @@
+--
+-- $Id$
+--
+
+DROP TABLE TMSEXPORT CASCADE CONSTRAINTS ; 
+
+CREATE TABLE TMSEXPORT ( 
+  BOL          CHAR (10), 
+  SEQ          CHAR (2), 
+  LINETYPE     CHAR (1), 
+  PIECES       NUMBER, 
+  WEIGHT       NUMBER, 
+  HAZFLAG      CHAR (1), 
+  LTLCLASS     CHAR (4), 
+  DESCRIPTION  VARCHAR2 (4000), 
+  SUFFIX       VARCHAR2 (32), 
+  ORDERID      NUMBER, 
+  SHIPID       NUMBER
+  );
+  exit;
+
+

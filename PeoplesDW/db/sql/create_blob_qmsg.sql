@@ -1,0 +1,11 @@
+--
+-- $Id: create_qmsg.sql 1 2005-05-26 12:20:03Z ed $
+--
+CREATE OR REPLACE TYPE QMSG_BLOB AS OBJECT
+(
+  TRANS VARCHAR2(10),
+  MESSAGE VARCHAR2(2000),
+  FILE_OBJECT  BLOB
+);
+/
+exit;

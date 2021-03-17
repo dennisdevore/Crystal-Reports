@@ -1,0 +1,10 @@
+drop view olsonbolrpt;
+drop view olson_lbl_hf_walmart_cs_view;
+drop view olson_lbl_hf_task_hdr_view;
+drop view olson_lbl_hf_task_cs_view;
+drop view olson_lbl_bp_task_cs_view;
+drop view olson_lbl_bp_task_carton_view;
+drop view olson_lbl_bp_cs_view2;
+drop view olson_lbl_bp_cs_view;
+drop table last_olsonbill_all;
+exit;

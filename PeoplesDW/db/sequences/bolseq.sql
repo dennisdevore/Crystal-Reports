@@ -1,0 +1,15 @@
+--
+-- $Id: bolseq.sql 1 2007-02-12 00:00:00Z eric $
+--
+
+-- drop sequence ALPS.BOLSEQ;
+
+CREATE SEQUENCE ALPS.BOLSEQ
+  START WITH 1
+  MAXVALUE 999999999
+  MINVALUE 1
+  CYCLE
+  NOCACHE
+  NOORDER;
+
+exit;

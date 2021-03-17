@@ -1,0 +1,35 @@
+alter table orderdtlline add
+(
+  dtlpassthruchar21  varchar2(255),
+  dtlpassthruchar22  varchar2(255),
+  dtlpassthruchar23  varchar2(255),
+  dtlpassthruchar24  varchar2(255),
+  dtlpassthruchar25  varchar2(255),
+  dtlpassthruchar26  varchar2(255),
+  dtlpassthruchar27  varchar2(255),
+  dtlpassthruchar28  varchar2(255),
+  dtlpassthruchar29  varchar2(255),
+  dtlpassthruchar30  varchar2(255),
+  dtlpassthruchar31  varchar2(255),
+  dtlpassthruchar32  varchar2(255),
+  dtlpassthruchar33  varchar2(255),
+  dtlpassthruchar34  varchar2(255),
+  dtlpassthruchar35  varchar2(255),
+  dtlpassthruchar36  varchar2(255),
+  dtlpassthruchar37  varchar2(255),
+  dtlpassthruchar38  varchar2(255),
+  dtlpassthruchar39  varchar2(255),
+  dtlpassthruchar40  varchar2(255),
+  dtlpassthrunum11   number(16,4),
+  dtlpassthrunum12   number(16,4),
+  dtlpassthrunum13   number(16,4),
+  dtlpassthrunum14   number(16,4),
+  dtlpassthrunum15   number(16,4),
+  dtlpassthrunum16   number(16,4),
+  dtlpassthrunum17   number(16,4),
+  dtlpassthrunum18   number(16,4),
+  dtlpassthrunum19   number(16,4),
+  dtlpassthrunum20   number(16,4)
+);
+
+exit;
